@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppa Business League - Spill</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: #F5F7FA;
+			min-height: 100vh;
+			padding: 1rem;
+		}
+ 
+		.header {
+			background: white;
+			backdrop-filter: none;
+			border-radius: 12px;
+			padding: 1.5rem;
+			margin-bottom: 1.5rem;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			border: 1px solid #E5E7EB;
+		}
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .player-info h2 {
+			color: #00A89E;
+			font-size: 1.5rem;
+			margin-bottom: 0.25rem;
+		}
+
+        .player-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .logout-btn {
+			padding: 0.5rem 1rem;
+			background: #EF4444;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 0.9rem;
+			transition: all 0.3s ease;
+		}
+
+        .logout-btn:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        .countdown-container {
+			background: linear-gradient(135deg, #00A89E, #00C4B4);
+			padding: 1.5rem;
+			border-radius: 12px;
+			text-align: center;
+			color: white;
+		}
+
+        .countdown-container.warning {
+			background: linear-gradient(135deg, #EF4444, #F87171);
+			animation: pulse 1s infinite;
+		}
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .countdown-container h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .session-content {
+			background: white;
+			backdrop-filter: none;
+			border-radius: 12px;
+			padding: 2rem;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			border: 1px solid #E5E7EB;
+		}
+
+        .session-content.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .session-title {
+			font-size: 2rem;
+			color: #111827;
+			margin-bottom: 1rem;
+			text-align: center;
+			font-weight: 700;
+		}
+
+        .session-intro {
+			background: #EFF6FF;
+			padding: 1.5rem;
+			border-radius: 12px;
+			margin-bottom: 2rem;
+			border-left: 4px solid #3B82F6;
+		}
+
+        .session-intro p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 3px solid #ffc107;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box.positive {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #28a745;
+        }
+
+        .result-box.negative {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-color: #dc3545;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-icon {
+            font-size: 3rem;
+        }
+
+        .result-title {
+            flex-grow: 1;
+        }
+
+        .result-title h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-title .your-choice {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .result-narrative {
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .result-amount {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+        }
+
+        .result-amount.positive {
+            color: #28a745;
+        }
+
+        .result-amount.negative {
+            color: #dc3545;
+        }
+
+        .result-instruction {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .result-instruction strong {
+            color: #333;
+        }
+
+        .tasks-section {
+            margin-bottom: 2rem;
+        }
+
+        .tasks-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .task-item {
+			background: #F9FAFB;
+			padding: 1rem;
+			margin-bottom: 0.75rem;
+			border-radius: 10px;
+			border-left: 4px solid #00A89E;
+			display: flex;
+			align-items: start;
+			gap: 0.75rem;
+		}
+
+		.task-number {
+			background: #00A89E;
+			color: white;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: bold;
+			flex-shrink: 0;
+		}
+
+        .task-content {
+            flex-grow: 1;
+        }
+
+        .task-content h4 {
+            color: #333;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .task-content p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .choices-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .choices-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .choice-item {
+			background: white;
+			padding: 1.5rem;
+			margin-bottom: 1rem;
+			border-radius: 12px;
+			border: 2px solid #E5E7EB;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.choice-item:hover {
+			border-color: #00A89E;
+			transform: translateX(5px);
+			box-shadow: 0 4px 12px rgba(0, 168, 158, 0.15);
+		}
+
+		.choice-item.selected {
+			border-color: #00A89E;
+			background: #F0FDFA; 
+		}
+
+        .choice-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .choice-letter {
+			background: #00A89E; 
+			color: white;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 900;
+			font-size: 1.2rem;
+		}
+
+        .choice-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .choice-details {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding-left: 3.5rem;
+        }
+
+        .submit-btn {
+			width: 100%;
+			padding: 1.2rem;
+			background: #00A89E;
+			color: white;
+			border: none;
+			border-radius: 12px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			margin-top: 2rem;
+		}
+
+        .submit-btn:hover:not(:disabled) {
+			background: #008A82;
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(0, 168, 158, 0.25);
+		}
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .waiting-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .waiting-screen h2 {
+            color: #00A651;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .waiting-screen p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+
+        .waiting-screen .status {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 2px solid #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .countdown-timer {
+                font-size: 2rem;
+            }
+
+            .session-title {
+                font-size: 1.5rem;
+            }
+        }
+		
+		.task-item.collapsible {
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.task-item.collapsible:hover {
+			background: #e8f4f8;
+			transform: translateX(3px);
+		}
+
+		.task-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+
+		.task-toggle {
+			font-size: 0.9rem;
+			color: #3B82F6;
+			transition: transform 0.3s ease;
+			margin-left: 1rem;
+		}
+
+		.task-toggle.open {
+			transform: rotate(180deg);
+		}
+
+		.task-details {
+			margin-top: 0.5rem;
+			padding-top: 0.5rem;
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.task-content h4 {
+			margin: 0;
+		}
+		
+		.balance-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 1rem 0;
+			font-size: 0.95rem;
+			background: white;
+			border-radius: 8px;
+			overflow: hidden;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		}
+
+		.balance-table thead {
+			background: #00A89E;
+			color: white;
+		}
+
+		.balance-table th {
+			padding: 0.75rem;
+			text-align: left;
+			font-weight: 600;
+		}
+
+		.balance-table tbody tr {
+			border-bottom: 1px solid #e5e7eb;
+		}
+
+		.balance-table tbody tr:hover {
+			background: #f9fafb;
+		}
+
+		.balance-table tbody tr.separator-row {
+			background: #f5f5f5;
+			border-top: 2px solid #00A89E;
+			border-bottom: 2px solid #00A89E;
+		}
+
+		.balance-table td {
+			padding: 0.75rem;
+		}
+
+		.balance-table td strong {
+			color: #00A89E;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+				<div class="player-info">
+					<h2 id="playerName">Laster...</h2>
+					<p id="playerCompany">-</p>
+					<p id="playerBalance" style="font-weight: 600; color: #00A651; margin-top: 0.5rem;">💰 Saldo: <span id="balanceAmount">-</span></p>
+				</div>
+				<button class="logout-btn" onclick="logout()">Logg ut</button>
+			</div>
+
+            <div class="countdown-container" id="countdownContainer">
+                <h3>⏰ Tid igjen til økt <span id="sessionNumber">1</span> stenger:</h3>
+                <div class="countdown-timer" id="countdownTimer">--:--:--</div>
+            </div>
+        </div>
+
+        <div class="session-content" id="sessionContent">
+            <!-- Content lastes dynamisk her -->
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ VIKTIG: Erstatt med din Google Apps Script URL
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwiBt51BJNbOqPbpoNzO75Qi3koCHkN7knIy-K1MKYxqybSDiFtPE4qr_rqN2IfiAZAfg/exec';
+        
+        // JSONP Helper Function (bypasses CORS)
+        function jsonpRequest(url, params = {}) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonpCallback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    const scriptTag = document.getElementById(callbackName);
+                    if (scriptTag && scriptTag.parentNode) scriptTag.parentNode.removeChild(scriptTag);
+                    resolve(data);
+                };
+                const queryParams = new URLSearchParams(params);
+                queryParams.append('callback', callbackName);
+                const script = document.createElement('script');
+                script.id = callbackName;
+                script.src = `${url}?${queryParams.toString()}`;
+                script.onerror = () => {
+                    delete window[callbackName];
+                    const scriptTag = document.getElementById(callbackName);
+                    if (scriptTag && scriptTag.parentNode) scriptTag.parentNode.removeChild(scriptTag);
+                    reject(new Error('Failed to load'));
+                };
+                document.body.appendChild(script);
+            });
+        }
+        
+        // Global state
+        let currentPlayer = null;
+        let sessionData = null;
+        let countdownInterval = null;
+
+        // Deadlines - will be fetched from Sheets
+        let DEADLINES = {
+            1: null,
+            2: null,
+            3: null
+        };
+
+        // Session content data
+const SESSIONS = {
+    1: {
+        title: 'Økt 1: Oppstart',
+        intro: 'Gratulerer! Suppa Ventures har investert i bedriften din. Kravet? Du fører regnskapet selv i Tripletex. Alt du ikke gjør, fakturerer regnskapsføreren - og det er ikke billig. Oppstartspakken hans koster 17 000 kr. Bevis at du klarer det selv!',
+        tasks: [
+            {
+                title: 'Opprett åpningsbalanse som balanserer per 01/01-25',
+                type: 'table',
+                reward: 0,
+                penalty: 8000,
+                desc: 'Opprett en åpningsbalanse som balanserer. Under finner du oversikt over kontoer og beløp.',
+                tableData: [
+                    { account: '1920', description: 'Bankinnskudd', amount: '505 000', side: 'debet' },
+                    { account: '1230', description: 'Vare- og lastebiler', amount: '35 000', side: 'debet' },
+                    { account: '1250', description: 'Inventar', amount: '25 000', side: 'debet' },
+                    { account: '1040', description: 'Lisenser, ervervet', amount: '20 000', side: 'debet' },
+                    { account: '', description: '---', amount: '---', side: '' },
+                    { account: '2000', description: 'Aksjekapital', amount: '50 000', side: 'kredit' },
+                    { account: '2020', description: 'Overkurs', amount: '502 500', side: 'kredit' },
+                    { account: '2579', description: 'Annen kortsiktig gjeld', amount: '30 000', side: 'kredit' },
+                    { account: '2400', description: 'Leverandørgjeld', amount: '20 000', side: 'kredit' },
+                    { account: '???', description: 'Din ansatte Kontor Assistent skylder deg penger. Dette burde nok legges i ansattreskontro til vedkommende...', amount: '17 500', side: 'debet' }
+                ]
+            },
+            {
+                title: 'Før din første leverandørfaktura',
+                type: 'text',
+                reward: 0,
+                penalty: 2000,
+                desc: `<strong>Uhellet er ute! 💸</strong><br><br>
+                Det har kommet en faktura i posten fra "Nordic IT Solutions AS" på 12 500 kr inkl. MVA for "systemlisenser og oppsett."<br><br>
+                Problemet? Du husker ikke å ha bestilt noe fra dem, og fakturabeløpet virker mistenkelig høyt. Kontaktperson på fakturaen svarer ikke på telefon.<br><br>
+                Regnskapsføreren din sier: "Registrer den uansett - vi må ha kontroll på hva som kommer inn. Men ikke betal før du har undersøkt!"<br><br>
+                <strong>Oppgave:</strong> Registrer fakturaen i leverandørmodulen. Ikke godkjenn betaling ennå.`
+            },
+            {
+                title: 'Manuell føring (utgift)',
+                type: 'text',
+                reward: 0,
+                penalty: 2000,
+                desc: `En håndverker måtte gjøre en liten, akutt reparasjon (skifte lås i døra). Han krevde betaling på stedet, 2 500 kr kontant. 🔧<br><br>
+                <strong>Oppgave:</strong> Før et manuelt bilag for transaksjonen. 📜`
+            },
+            {
+                title: 'Manuell føring (inntekt)',
+                type: 'text',
+                reward: 7500,
+                penalty: 0,
+                desc: `<strong>Ping! Ny e-post 📧</strong><br><br>
+                "Hei! Har nå endelig betalt fakturaen fra november i fjor - beklager at det tok tid!"<br><br>
+                Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br>
+                <strong>Oppgave:</strong> Før et manuelt bilag for inntekten på 7 500 kr.`
+            },
+            {
+                title: 'Din første faktura',
+                type: 'text',
+                reward: 20000,
+                penalty: 5000,
+                desc: `<strong>Din første kunde har ringt! 🎉</strong><br><br>
+                En potensiell kunde trenger umiddelbart hjelp. De er desperate - et kritisk prosjekt har stoppet opp og de trenger noen som kan levere raskt.<br><br>
+                "Vi betaler hva som helst for å få dette på plass," sa de da telefonen ringte tidlig i morges. "Men vi har hatt leverandører som fakturerte med feil MVA-kode - de mistet kontrakten umiddelbart. Sørg for at det er riktig."<br><br>
+                Du legger på og innser at du aldri har sendt en faktura fra Tripletex før. Regnskapsføreren din minner deg på: "Husk å sette opp fakturamal med logo og selskapsinfo først - førsteinntrykket teller når du skal bygge kunderelasjoner."<br><br>
+                <strong>Oppgave del 1:</strong> Last opp din bedrifts logo til fakturamal og tilpass oppsettet med korrekt selskapsinfo.<br><br>
+                <strong>Oppgave del 2:</strong> Aktiver riktig MVA-status for fakturering i Tripletex.<br><br>
+                <strong>Oppgave del 3:</strong> Send din første faktura på 20 000 kr ekskl. mva for din første leveranse.<br><br>
+                <small>*Regnskapsføreren din har gitt beskjed at han enda ikke er kjent med produktmodulen i Tripletex, og foretrekker at du ikke begynner å bruke den enda..</small>`
+            }
+        ],
+        choices: [
+            {
+                letter: 'A',
+                title: 'BlockNorth Krypto',
+                desc: 'Invester 100 000 NOK i kryptovaluta. Potensielt 20% avkastning, men høy risiko for tap.'
+            },
+            {
+                letter: 'B',
+                title: 'Høyrentekonto',
+                desc: 'Plasser 100 000 NOK på høyrentekonto. Garantert 5% avkastning, trygt og forutsigbart.'
+            }
+        ]
+    },
+    2: {
+        title: 'Økt 2: Drift',
+        intro: 'Bedriften er i gang! Nå skal du håndtere ansatte, internasjonale kunder, reiser og prosjekter. Resultatet av investeringsvalget ditt fra økt 1 vises når økten starter.',
+        tasks: [
+            {
+                title: 'Opprette ansatte',
+                type: 'text',
+                reward: 0,
+                penalty: 5000,
+                desc: `<strong>Oppgave:</strong> Opprett 3 ansatte i Tripletex:<br><br>
+                <strong>ANSATT 1 - Kontor Assistent:</strong><br>
+                • Fast månedslønn: 35 000 kr<br>
+                • Månedlig tillegg "Pendlerparkering": 500 kr<br><br>
+                <strong>ANSATT 2 - Konsul Ent:</strong><br>
+                • Timelønn: 450 kr/time<br><br>
+                <strong>ANSATT 3 - Regnskaps Sjef:</strong><br>
+                • Fast årslønn: 575 000 kr`
+            },
+            {
+                title: 'Bankintegrasjon',
+                type: 'text',
+                reward: 0,
+                penalty: 2000,
+                desc: `Din revisor ringte: "Bruker du virkelig manuell bankoverføring som en hobbyregnskapsfører?"<br><br>
+                <strong>Oppgave:</strong><br>
+                • Sett opp bankintegrasjon via Autopay<br>
+                • Aktiver KID-nummer på fakturaer`
+            },
+            {
+                title: 'Internasjonal kunde',
+                type: 'text',
+                reward: 55000,
+                penalty: 0,
+                desc: `Telefonen ringte klokka 08:15 med engelsk aksent: "We need immediate consulting services and prefer invoicing in EUR."<br><br>
+                Dette er din første utenlandske kunde! Regnskapsføreren din var krystallklar: "EUR-fakturaer må håndteres på egen bankkonto for valutaseparasjon. Ikke bland valutaer!"<br><br>
+                <strong>Oppgave:</strong><br>
+                • Opprett ny bankkonto for EUR-transaksjoner<br>
+                • Send faktura på <strong>5 000 EUR</strong> (0% MVA) for "Consulting Services"`
+            },
+            {
+                title: 'Opprett prosjekt',
+                type: 'text',
+                reward: 0,
+                penalty: 2000,
+                desc: `<strong>Kunden fra økt 1 er fornøyd! 🎉</strong><br><br>
+                "Vi vil gjerne fortsette samarbeidet. Kan dere sende noen til Trondheim for å planlegge fase 2?"<br><br>
+                Din nyansatte Konsul Ent tar oppdraget. Men først trenger du struktur på prosjektet.<br><br>
+                <strong>Oppgave:</strong> Opprett et timeprosjekt for kunden.`
+            },
+            {
+                title: 'Reiseregning med viderefakturering',
+                type: 'text',
+                reward: 980,
+                penalty: 3000,
+                desc: `Konsul Ent er tilbake fra Trondheim. Nå må reisen føres - og deler av den kan faktureres videre til kunden.<br><br>
+                <strong>Oppgave:</strong> Før en reiseregning knyttet til prosjektet:<br>
+                • <strong>Kostgodtgjørelse:</strong> Overnatting over 12 timer - innland, trekk frokost<br>
+                • <strong>Kjøring:</strong> Oslo-Trondheim-Oslo, ≈ 494 km<br>
+                • <strong>Kundemiddag:</strong> 980 kr - viderefakturer til kunden<br>
+                • <strong>Taxi:</strong> 345 kr<br>
+                • Godkjenn reiseregningen`
+            },
+            {
+                title: 'Timeføring og fakturering',
+                type: 'text',
+                reward: 18000,
+                penalty: 0,
+                desc: `Konsul Ent jobbet 40 timer på prosjektet i Trondheim.<br><br>
+                <strong>Oppgave:</strong><br>
+                • Før 40 timer à 450 kr/time på prosjektet<br>
+                • Fakturer timer og viderefakturerbare utlegg til kunden`
+            }
+        ],
+        choices: [
+            {
+                letter: 'A',
+                title: 'Sponsor lokal idrettsklubb',
+                desc: 'Gi 50 000 NOK i sponsing. Kan gi PR-boom og nye kunder, eller ingen effekt.'
+            },
+            {
+                letter: 'B',
+                title: 'Google Ads-kampanje',
+                desc: 'Invester 50 000 NOK i digital markedsføring. Kan gi leads, eller bare koste penger.'
+            }
+        ]
+    },
+    3: {
+        title: 'Økt 3: Månedsavslutning',
+        intro: 'Siste økt! Nå skal du kjøre lønn, sette opp abonnementer og avslutte måneden. Resultatet av markedsføringsvalget ditt fra økt 2 vises når økten starter.',
+        tasks: [
+            {
+                title: 'Fagforening og skattekort',
+                type: 'text',
+                reward: 0,
+                penalty: 4000,
+                desc: `Før du kan kjøre lønn må et par ting på plass.<br><br>
+                <strong>Del 1 - Fagforening:</strong><br>
+                Regnskaps Sjef er medlem i Økonomiforbundet. Opprett fagforeningen med:<br>
+                • Fagforeningskontingent: 1,7% av bruttolønn<br>
+                • Forsikringsbeløp: 815 kr<br>
+                • Knytt Regnskaps Sjef til fagforeningen<br><br>
+                <strong>Del 2 - Skattekort:</strong><br>
+                Legg inn skattekort for alle tre ansatte:<br>
+                • Kontor Assistent: Tabellkort, tabell 7100<br>
+                • Konsul Ent: Tabellkort, tabell 7100<br>
+                • Regnskaps Sjef: Tabellkort, tabell 7100`
+            },
+            {
+                title: 'Lønnskjøring',
+                type: 'text',
+                reward: 0,
+                penalty: 8000,
+                desc: `<strong>Det er lønningsdag! 💰</strong><br><br>
+                De ansatte venter på lønna si. Alt du har satt opp til nå blir testet.<br><br>
+                <strong>Oppgave:</strong><br>
+                • Opprett lønnskjøring for alle tre ansatte<br>
+                • Kontroller at fagforeningstrekk og skatt er korrekt<br>
+                • Godkjenn og kjør lønn med bankintegrasjon`
+            },
+            {
+                title: 'Abonnementsfakturering',
+                type: 'text',
+                reward: 23000,
+                penalty: 0,
+                desc: `<strong>Recurring revenue! 🔄</strong><br><br>
+                To kunder vil ha faste avtaler. Sett opp abonnementer:<br><br>
+                <strong>ABONNEMENT 1: Serviceavtale</strong><br>
+                • Opprett produkt: 15 000 kr inkl. MVA (25% MVA)<br>
+                • Månedlig fakturering, 12 måneder<br>
+                • Startdato: 01.09.2025<br><br>
+                <strong>ABONNEMENT 2: Supportavtale</strong><br>
+                • Opprett produkt: 8 000 kr ekskl. MVA (0% MVA)<br>
+                • Månedlig fakturering, 6 måneder<br>
+                • Startdato: 01.10.2025<br><br>
+                <strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene med automatisk fakturering.`
+            },
+            {
+                title: 'Bankavstemming og periodeavslutning',
+                type: 'text',
+                reward: 0,
+                penalty: 5000,
+                desc: `<strong>Måneden er over! 📊</strong><br><br>
+                "Før vi kan lukke måneden må banken være avstemt," sa regnskapsføreren. "Revisor kommer snart og forventer at alt er på plass."<br><br>
+                <strong>Oppgave:</strong><br>
+                • Avstem alle bankkontoer<br>
+                • Lås perioden for måneden`
+            }
+        ],
+        choices: []
+    }
+};
+
+        // 🔴 CRITICAL: Log IMMEDIATELY when script loads (not waiting for window.load)
+        console.log('🚨 game.html SCRIPT STARTER NÅ');
+        console.log('📍 SHEETS_API_URL:', SHEETS_API_URL);
+        console.log('🗂️ localStorage current_player:', localStorage.getItem('current_player'));
+        
+        // Initialize
+        window.addEventListener('load', async function() {
+            console.log('🎮 Game.html LOAD EVENT starter...');
+            
+            const playerCompany = localStorage.getItem('suppa_current_player');
+            console.log('📦 localStorage current_player:', playerCompany);
+            
+            if (!playerCompany) {
+                console.log('❌ Ingen spiller i localStorage, redirecter til login');
+                window.location.href = 'suppa-express.html';
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('playerName').textContent = 'Laster...';
+            document.getElementById('countdownTimer').textContent = 'Laster...';
+
+            try {
+                console.log('🔄 Henter deadlines...');
+                // Fetch deadlines from Sheets (JSONP)
+                const deadlinesData = await jsonpRequest(SHEETS_API_URL, { action: 'getDeadlines' });
+                console.log('📅 Deadlines response:', deadlinesData);
+                
+                if (deadlinesData.status === 'success') {
+                    DEADLINES = {
+                        1: new Date(deadlinesData.deadlines[1]).getTime(),
+                        2: new Date(deadlinesData.deadlines[2]).getTime(),
+                        3: new Date(deadlinesData.deadlines[3]).getTime()
+                    };
+                    console.log('✅ Deadlines hentet fra Sheets:', DEADLINES);
+                }
+
+                console.log('🔄 Henter spillerdata for:', playerCompany);
+                // Fetch player data from Sheets (JSONP)
+                const playerData = await jsonpRequest(SHEETS_API_URL, { 
+                    action: 'getPlayer', 
+                    company: playerCompany 
+                });
+                console.log('👤 Player response:', playerData);
+                
+                if (playerData.status === 'success') {
+					currentPlayer = playerData.data;
+					console.log('✅ Spillerdata hentet:', currentPlayer);
+					
+					// Display player info
+					document.getElementById('playerName').textContent = currentPlayer.name;
+					document.getElementById('playerCompany').textContent = currentPlayer.company;
+					document.getElementById('sessionNumber').textContent = currentPlayer.currentSession;
+					
+					updateBalanceDisplay(); 
+
+					// Load session
+					loadSession(currentPlayer.currentSession);
+
+                    // Start countdown
+                    startCountdown(currentPlayer.currentSession);
+                    
+                } else {
+                    throw new Error('Spillerdata ikke funnet');
+                }
+                
+            } catch (error) {
+                console.error('❌ FEIL ved lasting:', error);
+                console.error('❌ Error type:', error.constructor.name);
+                console.error('❌ Error message:', error.message);
+                console.error('❌ Error stack:', error.stack);
+                
+                // Clear localStorage to prevent loop
+                console.log('🗑️ Fjerner localStorage for å unngå loop...');
+                localStorage.removeItem('current_player');
+                localStorage.removeItem('player_name');
+                
+                alert('⚠️ Kunne ikke laste spillerdata. Sjekk at Google Sheets er satt opp riktig.\n\nFeil: ' + error.message + '\n\nSe Console for mer info.');
+                
+                console.log('⬅️ Redirecter tilbake til login...');
+                window.location.href = 'suppa-express.html';
+            }
+        });
+
+        function loadSession(sessionNum) {
+            const session = SESSIONS[sessionNum];
+            const deadline = DEADLINES[sessionNum];
+            const now = Date.now();
+
+            const contentDiv = document.getElementById('sessionContent');
+
+            // Check if session is closed
+            if (now > deadline) {
+                showWaitingScreen(sessionNum);
+                return;
+            }
+
+            // Build result box if session 2 or 3
+            let resultHtml = '';
+            if (sessionNum === 2 || sessionNum === 3) {
+                const previousSession = sessionNum - 1;
+                const previousChoice = currentPlayer[`session${previousSession}Choice`];
+                
+                if (previousChoice) {
+                    // Get result - for now simulate with random outcome
+                    // TODO: Later this will be fetched from Google Sheets based on admin's decision
+                    const result = getResultForChoice(previousSession, previousChoice);
+                    
+                    if (result) {
+                        const resultClass = result.amount > 0 ? 'positive' : result.amount < 0 ? 'negative' : '';
+                        const amountClass = result.amount > 0 ? 'positive' : result.amount < 0 ? 'negative' : '';
+                        const amountPrefix = result.amount > 0 ? '+' : '';
+                        
+                        resultHtml = `
+                            <div class="result-box ${resultClass}">
+                                <div class="result-header">
+                                    <div class="result-icon">${result.icon}</div>
+                                    <div class="result-title">
+                                        <h3>${result.title}</h3>
+                                        <div class="your-choice">Ditt valg fra økt ${previousSession}: Alternativ ${previousChoice}</div>
+                                    </div>
+                                </div>
+                                <div class="result-narrative">
+                                    ${result.narrative}
+                                </div>
+                                <div class="result-amount ${amountClass}">
+                                    ${amountPrefix}${result.amount.toLocaleString('no-NO')} NOK
+                                </div>
+                                <div class="result-instruction">
+                                    <strong>📝 Bokføringsoppgave:</strong> ${result.booking}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            // Show session content
+            let html = `
+                <h1 class="session-title">${session.title}</h1>
+                <div class="session-intro">
+                    <p>${session.intro}</p>
+                </div>
+
+                ${resultHtml}
+
+                <div class="tasks-section">
+					<h3>📋 Oppgaver i Tripletex</h3>
+					${session.tasks.map((task, i) => {
+						let taskContent = '';
+						
+						if (task.type === 'table') {
+							// Render tabell for åpningsbalanse
+							taskContent = `
+								<div class="task-header">
+									<h4>${task.title}</h4>
+									<span class="task-toggle" id="toggle-${i}">▼</span>
+								</div>
+								<div class="task-details" id="task-${i}" style="display: none;">
+									<p style="margin-bottom: 1rem;">${task.desc}</p>
+									<table class="balance-table">
+										<thead>
+											<tr>
+												<th>Konto</th>
+												<th>Beskrivelse</th>
+												<th style="text-align: right;">Beløp (NOK)</th>
+											</tr>
+										</thead>
+										<tbody>
+											${task.tableData.map(row => `
+												<tr class="${row.account === '' ? 'separator-row' : ''}">
+													<td><strong>${row.account}</strong></td>
+													<td>${row.description}</td>
+													<td style="text-align: right;">${row.amount}</td>
+												</tr>
+											`).join('')}
+										</tbody>
+									</table>
+									<p style="margin-top: 1rem; padding: 0.75rem; background: #fff9e6; border-left: 4px solid #ffc107; border-radius: 8px; font-size: 0.9rem;">
+										<strong>💡 Tips:</strong> Balansen må gå i null. Debet (eiendeler) = Kredit (egenkapital + gjeld)
+									</p>
+								</div>
+							`;
+						} else {
+							// Vanlig tekst-oppgave
+							taskContent = `
+								<div class="task-header">
+									<h4>${task.title}</h4>
+									<span class="task-toggle" id="toggle-${i}">▼</span>
+								</div>
+								<div class="task-details" id="task-${i}" style="display: none;">
+									<p>${task.desc}</p>
+								</div>
+							`;
+						}
+						
+						return `
+							<div class="task-item collapsible" onclick="toggleTask(${i})">
+								<div class="task-number">${i + 1}</div>
+								<div class="task-content">
+									${taskContent}
+								</div>
+							</div>
+						`;
+					}).join('')}
+				</div>
+            `;
+
+            // Add choices if they exist
+            if (session.choices.length > 0) {
+                html += `
+                    <div class="choices-section">
+                        <h3>💡 Velg din strategi</h3>
+                        ${session.choices.map(choice => `
+                            <div class="choice-item" onclick="selectChoice('${choice.letter}')">
+                                <div class="choice-header">
+                                    <div class="choice-letter">${choice.letter}</div>
+                                    <div class="choice-title">${choice.title}</div>
+                                </div>
+                                <div class="choice-details">${choice.desc}</div>
+                            </div>
+                        `).join('')}
+                        <button class="submit-btn" id="submitBtn" onclick="submitChoice()" disabled>
+                            Bekreft valg
+                        </button>
+                    </div>
+                `;
+            }
+
+            contentDiv.innerHTML = html;
+            contentDiv.classList.remove('hidden');
+        }
+		
+		function calculateBalance() {
+			let balance = 500000; // Startbalanse fra åpningsbalanse (oppgave 1)
+			
+			// Legg til økt 1 resultat hvis det finnes
+			if (currentPlayer.session1Amount !== undefined && currentPlayer.session1Amount !== null) {
+				balance += currentPlayer.session1Amount;
+			}
+			
+			// Legg til økt 2 resultat hvis det finnes
+			if (currentPlayer.session2Amount !== undefined && currentPlayer.session2Amount !== null) {
+				balance += currentPlayer.session2Amount;
+			}
+			
+			return balance;
+		}
+
+		function updateBalanceDisplay() {
+			const balance = calculateBalance();
+			const balanceElement = document.getElementById('balanceAmount');
+			
+			if (balanceElement) {
+				balanceElement.textContent = balance.toLocaleString('no-NO') + ' NOK';
+				
+				// Fargekoding basert på om det er over/under startverdi
+				if (balance > 500000) {
+					balanceElement.style.color = '#28a745'; // Grønn
+				} else if (balance < 500000) {
+					balanceElement.style.color = '#dc3545'; // Rød
+				} else {
+					balanceElement.style.color = '#00A651'; // Standard
+				}
+			}
+		}		
+
+        // Get result for a choice - fetches outcome from Sheets (set by admin)
+        function getResultForChoice(sessionNum, choice) {
+			const sessionKey = `session${sessionNum}`;
+			const resultsForSession = RESULTS[sessionKey];
+			
+			if (!resultsForSession || !resultsForSession[choice]) {
+				return null;
+			}
+
+			const outcomeKey = `session${sessionNum}Outcome`;
+			const outcomeType = currentPlayer[outcomeKey];
+			
+			const amountKey = `session${sessionNum}Amount`;
+			const actualAmount = currentPlayer[amountKey];  // ✅ Hent faktisk beløp fra Sheets
+			
+			if (outcomeType && actualAmount !== undefined) {
+				// Admin har satt outcome og beløp - bruk det
+				const outcomes = resultsForSession[choice];
+				const result = outcomes[outcomeType];
+				
+				// ✅ Overstyr beløp med faktisk beløp fra Sheets
+				return {
+					...result,
+					amount: actualAmount
+				};
+			}
+
+			// Ikke satt ennå
+			return {
+				icon: '⏳',
+				title: choice === 'A' ? resultsForSession.A.success.title : resultsForSession.B.success.title,
+				narrative: 'Resultatet blir publisert snart! Admin jobber med å beregne utfallene.',
+				amount: 0,
+				booking: 'Venter på resultat fra admin...'
+			};
+		}
+
+        let selectedChoice = null;
+
+        function selectChoice(letter) {
+            selectedChoice = letter;
+            
+            // Update UI
+            document.querySelectorAll('.choice-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            // Enable submit button
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitChoice() {
+			if (!selectedChoice) return;
+
+			const confirmed = confirm(`Er du sikker på at du vil velge alternativ ${selectedChoice}?\n\nDu kan ikke endre valget ditt senere!`);
+			if (!confirmed) return;
+
+			const submitBtn = document.getElementById('submitBtn');
+			submitBtn.disabled = true;
+			submitBtn.textContent = '⏳ Lagrer...';
+
+			// ✅ Endret til GET med JSONP
+			jsonpRequest(SHEETS_API_URL, {
+				action: 'saveChoice',
+				company: currentPlayer.company,
+				session: currentPlayer.currentSession,
+				choice: selectedChoice
+			})
+			.then(() => {
+				console.log('✅ Valg lagret til Sheets');
+				
+				currentPlayer[`session${currentPlayer.currentSession}Choice`] = selectedChoice;
+				currentPlayer[`session${currentPlayer.currentSession}ChoiceTime`] = new Date().toISOString();
+
+				alert(`✅ Valg ${selectedChoice} registrert!\n\nDu kan nå fortsette å jobbe med oppgavene frem til økten stenger.`);
+				
+				document.querySelectorAll('.choice-item').forEach(item => {
+					item.style.opacity = '0.6';
+					item.style.pointerEvents = 'none';
+				});
+				submitBtn.textContent = '✅ Valg registrert';
+			})
+			.catch(error => {
+				console.error('Feil ved lagring av valg:', error);
+				alert('⚠️ Kunne ikke lagre valg. Prøv igjen!');
+				submitBtn.disabled = false;
+				submitBtn.textContent = 'Bekreft valg';
+			});
+		}
+
+        function startCountdown(sessionNum) {
+            const deadline = DEADLINES[sessionNum];
+            const container = document.getElementById('countdownContainer');
+            const timerDisplay = document.getElementById('countdownTimer');
+
+            countdownInterval = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = deadline - now;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    timerDisplay.textContent = '00:00:00';
+                    container.classList.add('warning');
+                    
+                    // Hide session content with fade out
+                    const contentDiv = document.getElementById('sessionContent');
+                    contentDiv.classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        showWaitingScreen(sessionNum);
+                    }, 500);
+                    return;
+                }
+
+                // Calculate time
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                timerDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                // Warning when less than 5 minutes
+                if (timeLeft < 5 * 60 * 1000) {
+                    container.classList.add('warning');
+                }
+            }, 1000);
+        }
+
+        function showWaitingScreen(sessionNum) {
+            const contentDiv = document.getElementById('sessionContent');
+            
+            let message = '';
+            if (sessionNum === 1) {
+                message = `
+                    <h2>🎉 Økt 1 er stengt!</h2>
+                    <p>Takk for innsatsen! Vi jobber nå med å beregne resultatene av investeringsvalgene.</p>
+                    <p>Resultatet av ditt valg vil vises når du starter økt 2.</p>
+                    <div class="status">
+                        <strong>💡 Tips:</strong> Ta en pause, men kom tilbake når økt 2 åpner!
+                    </div>
+                `;
+            } else if (sessionNum === 2) {
+                message = `
+                    <h2>🎉 Økt 2 er stengt!</h2>
+                    <p>Flott jobbet! Vi beregner nå resultatene av markedsføringsvalgene.</p>
+                    <p>Resultatet vises i økt 3 - siste runde!</p>
+                    <div class="status">
+                        <strong>💡 Tips:</strong> Siste økt er den vanskeligste. Forbered deg mentalt! 🧠
+                    </div>
+                `;
+            } else {
+                message = `
+                    <h2>🏁 Spillet er ferdig!</h2>
+                    <p>Du har fullført alle tre økter - flott jobbet!</p>
+                    <p>Resultater og leaderboard blir publisert når alle er ferdige og vi har rettet oppgavene.</p>
+                    <div class="status">
+                        <strong>🏆 Takk for deltakelsen!</strong> Vi ses på premieutdelingen! 🎊
+                    </div>
+                `;
+            }
+
+            contentDiv.innerHTML = `<div class="waiting-screen">${message}</div>`;
+            contentDiv.classList.remove('hidden');
+        }
+
+        function logout() {
+            if (confirm('Er du sikker på at du vil logge ut?')) {
+                localStorage.removeItem('suppa_current_player');
+                window.location.href = 'suppa-express.html';
+            }
+        }
+		
+		function toggleTask(index) {
+			const details = document.getElementById(`task-${index}`);
+			const toggle = document.getElementById(`toggle-${index}`);
+			
+			if (details.style.display === 'none') {
+				details.style.display = 'block';
+				toggle.classList.add('open');
+			} else {
+				details.style.display = 'none';
+				toggle.classList.remove('open');
+			}
+		}
+    </script>
+</body>
+</html>

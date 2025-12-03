@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Suppa Business League</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: #F5F7FA;
+			min-height: 100vh;
+			padding: 2rem;
+		}
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+			color: #00A89E;
+			margin-bottom: 0.5rem;
+		}
+
+        .header p {
+            color: #666;
+        }
+
+        .panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .player-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .player-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            border-left: 4px solid #00A89E;
+        }
+
+        .player-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-item small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: #00A89E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+			background: #008A82;
+			box-shadow: 0 5px 15px rgba(0, 168, 158, 0.3);
+		}
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .panels {
+                grid-template-columns: 1fr;
+            }
+
+            .outcome-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+		
+		.leaderboard-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0.75rem 1rem;
+			margin-bottom: 0.5rem;
+			background: #f8f9fa;
+			border-radius: 8px;
+			border-left: 4px solid #667eea;
+		}
+
+		.leaderboard-item.top3 {
+			background: linear-gradient(135deg, #fff9e6, #fff3cd);
+			border-left-color: #ffc107;
+		}
+
+		.leaderboard-rank {
+			font-size: 1.5rem;
+			font-weight: 900;
+			color: #667eea;
+			min-width: 40px;
+		}
+
+		.leaderboard-info {
+			flex-grow: 1;
+			margin-left: 1rem;
+		}
+
+		.leaderboard-info strong {
+			display: block;
+			color: #333;
+		}
+
+		.leaderboard-info small {
+			color: #666;
+			font-size: 0.85rem;
+		}
+
+		.leaderboard-points {
+			font-size: 1.3rem;
+			font-weight: 900;
+			color: #00A651;
+		}
+
+		.outcome-item {
+			background: #f8f9fa;
+			padding: 1rem;
+			margin-bottom: 0.75rem;
+			border-radius: 8px;
+			border-left: 4px solid #667eea;
+		}
+
+		.outcome-item.success {
+			border-left-color: #28a745;
+			background: #e8f5e9;
+		}
+
+		.outcome-item.moderate {
+			border-left-color: #ffc107;
+			background: #fff9e6;
+		}
+
+		.outcome-item.failure {
+			border-left-color: #dc3545;
+			background: #f8d7da;
+		}
+
+		.outcome-item strong {
+			display: block;
+			margin-bottom: 0.25rem;
+			color: #333;
+		}
+
+		.outcome-item .badge {
+			display: inline-block;
+			padding: 0.25rem 0.5rem;
+			border-radius: 4px;
+			font-size: 0.75rem;
+			font-weight: 600;
+			margin-left: 0.5rem;
+		}
+
+		.badge.success { background: #28a745; color: white; }
+		.badge.moderate { background: #ffc107; color: #333; }
+		.badge.failure { background: #dc3545; color: white; }
+		
+		.task-checkbox-item {
+			background: #f8f9fa;
+			padding: 1rem;
+			margin-bottom: 0.75rem;
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.task-checkbox-item:hover {
+			background: #e8f4f8;
+		}
+
+		.task-checkbox-item input[type="checkbox"] {
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+		}
+
+		.task-checkbox-label {
+			flex-grow: 1;
+		}
+
+		.task-checkbox-rewards {
+			font-size: 0.85rem;
+			color: #666;
+		}
+
+		.task-checkbox-rewards .reward {
+			color: #28a745;
+			font-weight: 600;
+		}
+
+		.task-checkbox-rewards .penalty {
+			color: #dc3545;
+			font-weight: 600;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="header">
+        <h1>🎯 Admin Panel - Suppa Business League</h1>
+        <p>Sett outcomes og oppdater poeng for deltakerne</p>
+    </div>
+
+    <!-- ✅ LEGG TIL DENNE WRAPPEREN -->
+    <div class="panels">
+    
+        <!-- Panel 1: Draw Outcomes -->
+        <div class="panel">
+            <h2>🎲 Trekk Outcomes (Terningkast)</h2>
+            
+            <div class="info-box">
+                Trekker random outcomes for alle som har gjort valg. Kjør etter at økten er stengt!
+            </div>
+            <div class="form-group">
+                <label>Velg økt:</label>
+                <select id="drawSession">
+                    <option value="1">Økt 1 (Investering)</option>
+                    <option value="2">Økt 2 (Markedsføring)</option>
+                </select>
+            </div>
+            <button class="btn" onclick="drawOutcomesForSession()">🎲 Trekk outcomes</button>
+            <div id="drawInfo" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; display: none;">
+                <strong>Resultat:</strong> <span id="drawInfoText"></span>
+            </div>
+        </div>
+          
+        <!-- Panel 3: Økt-styring -->
+        <div class="panel">
+            <h2>⏭️ Økt-styring</h2>
+            <div class="info-box">
+                Flytt alle spillere til neste økt samtidig
+            </div>
+            <button class="btn" onclick="startNextSession()">▶️ Start neste økt for alle</button>
+        </div>
+        
+        <!-- Panel 4: Player Overview -->
+        <div class="panel">
+            <h2>👥 Spilleroversikt</h2>
+            <div class="player-list" id="playerList">
+                <p>Laster spillere...</p>
+            </div>
+            <button class="btn" onclick="refreshPlayers()">🔄 Oppdater liste</button>
+        </div>
+		
+		<!-- Panel: Leaderboard -->
+		<div class="panel">
+			<h2>🏆 Leaderboard</h2>
+			<div id="leaderboard" style="max-height: 400px; overflow-y: auto;">
+				<p>Laster...</p>
+			</div>
+		</div>
+
+		<!-- Panel: Outcomes Oversikt -->
+		<div class="panel">
+			<h2>🎲 Outcomes Oversikt</h2>
+			<div class="form-group">
+				<label>Velg økt:</label>
+				<select id="outcomesViewSession" onchange="showOutcomes()">
+					<option value="1">Økt 1 (Investering)</option>
+					<option value="2">Økt 2 (Markedsføring)</option>
+				</select>
+			</div>
+			<div id="outcomesView" style="max-height: 400px; overflow-y: auto;">
+				<p>Velg økt for å se outcomes</p>
+			</div>
+		</div>
+		
+		<!-- Panel: Oppgavegjennomgang -->
+<div class="panel" style="grid-column: 1 / -1;">
+    <h2>✅ Oppgavegjennomgang</h2>
+    
+    <div class="form-group">
+        <label>Velg spiller:</label>
+        <select id="taskPlayer" onchange="loadPlayerTasks()">
+            <option value="">-- Velg spiller --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Velg økt:</label>
+        <select id="taskSession" onchange="loadPlayerTasks()">
+            <option value="1">Økt 1</option>
+            <option value="2">Økt 2</option>
+            <option value="3">Økt 3</option>
+        </select>
+    </div>
+
+    <div id="taskChecklist" style="display: none;">
+        <h3 style="margin: 1.5rem 0 1rem 0; color: #333;">Kryss av løste oppgaver:</h3>
+        <div id="taskCheckboxes"></div>
+        
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+            <strong>Beregnet resultat:</strong>
+            <div id="taskCalculation" style="font-size: 1.2rem; margin-top: 0.5rem; font-weight: 600;"></div>
+        </div>
+
+        <button class="btn" onclick="saveTaskResults()">💾 Lagre resultat</button>
+    </div>
+</div>
+        
+    </div>
+    <!-- ✅ SLUTT PÅ PANELS WRAPPER -->
+</div>
+
+    <script>
+        // ⚠️ VIKTIG: Erstatt med din Google Apps Script URL
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwiBt51BJNbOqPbpoNzO75Qi3koCHkN7knIy-K1MKYxqybSDiFtPE4qr_rqN2IfiAZAfg/exec';
+		
+		const TASK_DEFINITIONS = {
+			1: [
+				{ id: 1, title: 'Opprett åpningsbalanse', reward: 0, penalty: 40000, type: 'system' },
+				{ id: 2, title: 'Fakturaoppsett', reward: 0, penalty: 30000, type: 'system' },
+				{ id: 3, title: 'MVA-innstillinger', reward: 0, penalty: 20000, type: 'system' },
+				{ id: 4, title: 'Første fakturering', reward: 72000, penalty: 0, type: 'revenue' },
+				{ id: 5, title: 'Før leverandørfaktura', reward: 0, penalty: 35000, type: 'system' },
+				{ id: 6, title: 'Manuell føring', reward: 0, penalty: 25000, type: 'system' },
+				{ id: 7, title: 'Fagforeningsavtale', reward: 0, penalty: 40000, type: 'system' },
+				{ id: 8, title: 'Opprette ansatte', reward: 0, penalty: 40000, type: 'system' }
+			],
+			2: [
+				{ id: 1, title: 'Fagforeningsrettelse', reward: 0, penalty: 50000, type: 'system' },
+				{ id: 2, title: 'Internasjonal kunde', reward: 25000, penalty: 50000, type: 'revenue' },
+				{ id: 3, title: 'Reiseregning og viderefakturering', reward: 37500, penalty: 75000, type: 'revenue' },
+				{ id: 4, title: 'Opprett prosjekter', reward: 50000, penalty: 100000, type: 'revenue' },
+				{ id: 5, title: 'Bankintegrasjon oppsett', reward: 0, penalty: 50000, type: 'system' },
+				{ id: 6, title: 'Manuelt bilag', reward: 0, penalty: 50000, type: 'system' },
+				{ id: 7, title: 'Ny leverandørfaktura', reward: 0, penalty: 25000, type: 'system' },
+				{ id: 8, title: 'Kundeoppfølging og delvis betaling', reward: 17500, penalty: 35000, type: 'revenue' },
+				{ id: 9, title: 'Abonnementsfakturering', reward: 50000, penalty: 100000, type: 'revenue' },
+				{ id: 10, title: 'Første lønnskjøring', reward: 0, penalty: 150000, type: 'system' }
+			],
+			3: [
+				{ id: 1, title: 'Bokfør markedsføringsresultat', reward: 0, penalty: 30000, type: 'system' },
+				{ id: 2, title: 'Avstemming', reward: 0, penalty: 40000, type: 'system' },
+				{ id: 3, title: 'MVA-oppgjør', reward: 0, penalty: 50000, type: 'system' },
+				{ id: 4, title: 'Månedsrapport', reward: 0, penalty: 40000, type: 'system' }
+			]
+		};
+		
+		function updatePlayerDropdowns() {
+			const taskPlayer = document.getElementById('taskPlayer');
+			
+			if (!taskPlayer) return; // Panelet finnes ikke ennå
+			
+			let html = '<option value="">-- Velg spiller --</option>';
+			players.forEach(player => {
+				html += `<option value="${player.company}">${player.name} (${player.company})</option>`;
+			});
+			
+			taskPlayer.innerHTML = html;
+		}
+
+function loadPlayerTasks() {
+    const playerCompany = document.getElementById('taskPlayer').value;
+    const session = parseInt(document.getElementById('taskSession').value);
+    
+    if (!playerCompany) {
+        document.getElementById('taskChecklist').style.display = 'none';
+        return;
+    }
+    
+    const tasks = TASK_DEFINITIONS[session];
+    const checklistDiv = document.getElementById('taskChecklist');
+    const checkboxesDiv = document.getElementById('taskCheckboxes');
+    
+    let html = '';
+    tasks.forEach(task => {
+        html += `
+            <div class="task-checkbox-item">
+                <input type="checkbox" id="task-${task.id}" value="${task.id}" onchange="calculateTaskBonus()">
+                <label class="task-checkbox-label" for="task-${task.id}">
+                    <strong>${task.title}</strong>
+                </label>
+                <div class="task-checkbox-rewards">
+                    <span class="reward">+${task.reward.toLocaleString('no-NO')}</span> / 
+                    <span class="penalty">-${task.penalty.toLocaleString('no-NO')}</span>
+                </div>
+            </div>
+        `;
+    });
+    
+    checkboxesDiv.innerHTML = html;
+    checklistDiv.style.display = 'block';
+    calculateTaskBonus();
+}
+
+function calculateTaskBonus() {
+    const session = parseInt(document.getElementById('taskSession').value);
+    const tasks = TASK_DEFINITIONS[session];
+    
+    let bonus = 0;
+    let completed = 0;
+    
+    tasks.forEach(task => {
+        const checkbox = document.getElementById(`task-${task.id}`);
+        if (checkbox.checked) {
+            bonus += task.reward;
+            completed++;
+        } else {
+            bonus -= task.penalty;
+        }
+    });
+    
+    const calcDiv = document.getElementById('taskCalculation');
+    const color = bonus >= 0 ? '#28a745' : '#dc3545';
+    calcDiv.innerHTML = `
+        <span style="color: ${color};">${bonus >= 0 ? '+' : ''}${bonus.toLocaleString('no-NO')} kr</span>
+        <small style="display: block; color: #666; margin-top: 0.5rem;">
+            ${completed} av ${tasks.length} oppgaver løst
+        </small>
+    `;
+}
+
+async function saveTaskResults() {
+    const playerCompany = document.getElementById('taskPlayer').value;
+    const session = parseInt(document.getElementById('taskSession').value);
+    
+    if (!playerCompany) {
+        alert('Velg en spiller først!');
+        return;
+    }
+    
+    const tasks = TASK_DEFINITIONS[session];
+    const completedTasks = [];
+    
+    tasks.forEach(task => {
+        const checkbox = document.getElementById(`task-${task.id}`);
+        if (checkbox.checked) {
+            completedTasks.push(task.id);
+        }
+    });
+    
+    const confirmed = confirm(`Lagre resultat for ${playerCompany} i økt ${session}?\n\nDette oppdaterer deres saldo.`);
+    if (!confirmed) return;
+    
+    try {
+        const result = await jsonpRequest(SHEETS_API_URL, {
+            action: 'saveTaskResults',
+            company: playerCompany,
+            session: session,
+            completedTasks: completedTasks.join(','),
+            taskDefinitions: JSON.stringify(tasks)
+        });
+        
+        if (result.status === 'success') {
+            alert(`✅ ${result.message}\n\n${result.completed}/${result.total} oppgaver løst`);
+            refreshPlayers();
+        } else {
+            alert('⚠️ Feil: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Feil:', error);
+        alert('⚠️ Kunne ikke lagre resultat');
+    }
+}
+		
+		function jsonpRequest(url, params = {}) {
+			return new Promise((resolve, reject) => {
+				const callbackName = 'jsonpCallback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+				window[callbackName] = function(data) {
+					delete window[callbackName];
+					const scriptTag = document.getElementById(callbackName);
+					if (scriptTag && scriptTag.parentNode) scriptTag.parentNode.removeChild(scriptTag);
+					resolve(data);
+				};
+				const queryParams = new URLSearchParams(params);
+				queryParams.append('callback', callbackName);
+				const script = document.createElement('script');
+				script.id = callbackName;
+				script.src = `${url}?${queryParams.toString()}`;
+				script.onerror = () => {
+					delete window[callbackName];
+					const scriptTag = document.getElementById(callbackName);
+					if (scriptTag && scriptTag.parentNode) scriptTag.parentNode.removeChild(scriptTag);
+					reject(new Error('Failed to load'));
+				};
+				document.body.appendChild(script);
+			});
+		}
+
+		let players = [];
+
+        // Load players on page load
+        window.addEventListener('load', function() {
+            refreshPlayers();
+        });
+
+        async function refreshPlayers() {
+			try {
+				const response = await fetch(`${SHEETS_API_URL}?action=getAllPlayers`);
+				const data = await response.json();
+
+				if (data.status === 'success') {
+					players = data.players;
+					
+					displayPlayers();
+					displayLeaderboard();
+					showOutcomes();
+					updatePlayerDropdowns();  // ✅ Må være her MED force re-render kode
+					
+					console.log('✅ Spillere lastet:', players.length);
+				}
+			} catch (error) {
+				console.error('Feil ved lasting av spillere:', error);
+				alert('⚠️ Kunne ikke laste spillere. Sjekk at SHEETS_API_URL er riktig!');
+			}
+		}
+
+        function updatePlayerDropdowns() {
+			const taskPlayer = document.getElementById('taskPlayer');
+			
+			if (!taskPlayer) return;
+			
+			let html = '<option value="">-- Velg spiller --</option>';
+			players.forEach(player => {
+				html += `<option value="${player.company}">${player.name} (${player.company})</option>`;
+			});
+			
+			taskPlayer.innerHTML = html;
+			
+			// ✅ Force re-render
+			taskPlayer.style.display = 'none';
+			taskPlayer.offsetHeight; // Trigger reflow
+			taskPlayer.style.display = '';
+		}
+		
+
+        function displayPlayers() {
+			const container = document.getElementById('playerList');
+			
+			// ✅ Filtrer ut ugyldige spillere
+			const validPlayers = players.filter(p => p.name && p.company);
+			
+			if (validPlayers.length === 0) {
+				container.innerHTML = '<p>Ingen spillere registrert ennå.</p>';
+				return;
+			}
+
+			let html = '';
+			validPlayers.forEach(player => {
+				html += `
+					<div class="player-item">
+						<strong>${player.name}</strong>
+						<small>${player.company}</small><br>
+						<small>Gjeldende økt: ${player.currentSession} • Total poeng: ${player.totalPoints || 0}</small><br>
+						<small>Valg Ø1: ${player.session1Choice || '-'} • Valg Ø2: ${player.session2Choice || '-'}</small>
+					</div>
+				`;
+			});
+
+			container.innerHTML = html;
+		}
+
+        async function setOutcome(outcome) {
+            const playerCompany = document.getElementById('outcomePlayer').value;
+            const session = document.getElementById('outcomeSession').value;
+
+            if (!playerCompany) {
+                alert('Velg en spiller først!');
+                return;
+            }
+
+            const confirmed = confirm(`Sett outcome "${outcome}" for ${playerCompany} i økt ${session}?`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'setOutcome',
+                        company: playerCompany,
+                        session: parseInt(session),
+                        outcome: outcome
+                    })
+                });
+
+                // no-cors means we can't read response, but request was sent
+                const infoBox = document.getElementById('outcomeInfo');
+                const infoText = document.getElementById('outcomeInfoText');
+                infoText.textContent = `Outcome "${outcome}" satt for ${playerCompany} i økt ${session}`;
+                infoBox.style.display = 'block';
+                
+                console.log('✅ Outcome satt');
+                
+                setTimeout(() => {
+                    infoBox.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Feil ved setting av outcome:', error);
+                alert('⚠️ Kunne ikke sette outcome. Prøv igjen!');
+            }
+        }
+
+        async function updatePoints() {
+			const playerCompany = document.getElementById('pointsPlayer').value;
+			const session = document.getElementById('pointsSession').value;
+			const points = parseInt(document.getElementById('pointsAmount').value);
+
+			if (!playerCompany) {
+				alert('Velg en spiller først!');
+				return;
+			}
+
+			if (isNaN(points) || points < 0 || points > 100) {
+				alert('Ugyldig poengsum! Må være mellom 0 og 100.');
+				return;
+			}
+
+			const confirmed = confirm(`Gi ${points} poeng til ${playerCompany} for økt ${session}?`); // ✅ Fikset
+			if (!confirmed) return;
+
+			try {
+				const response = await fetch(SHEETS_API_URL, {
+					method: 'POST',
+					mode: 'no-cors',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						action: 'updatePoints',
+						company: playerCompany,
+						session: parseInt(session),
+						points: points
+					})
+				});
+
+				alert(`✅ ${points} poeng gitt til ${playerCompany} for økt ${session}!`); // ✅ Fikset
+				
+				document.getElementById('pointsAmount').value = '';
+				setTimeout(refreshPlayers, 1000);
+
+			} catch (error) {
+				console.error('Feil ved oppdatering av poeng:', error);
+				alert('⚠️ Kunne ikke oppdatere poeng. Prøv igjen!');
+			}
+		}
+
+		async function startNextSession() {
+			const confirmed = confirm('Start neste økt for ALLE spillere?\n\nDette kan ikke angres!');
+			if (!confirmed) return;
+
+			try {
+				await jsonpRequest(SHEETS_API_URL, { action: 'startNextSession' });
+				alert('✅ Alle spillere flyttet til neste økt!');
+				refreshPlayers();
+			} catch (error) {
+				console.error('Feil:', error);
+				alert('⚠️ Kunne ikke starte neste økt');
+			}
+		}
+		
+		async function drawOutcomesForSession() {
+			const session = document.getElementById('drawSession').value;
+			
+			const confirmed = confirm(`Trekk outcomes for ALLE spillere i økt ${session}?\n\nDette kan ikke angres!`);
+			if (!confirmed) return;
+
+			try {
+				const result = await jsonpRequest(SHEETS_API_URL, { 
+					action: 'drawOutcomes',
+					session: parseInt(session)
+				});
+				
+				if (result.status === 'success') {
+					const infoBox = document.getElementById('drawInfo');
+					const infoText = document.getElementById('drawInfoText');
+					infoText.textContent = `${result.count} spillere fikk outcomes for økt ${session}`;
+					infoBox.style.display = 'block';
+					
+					alert(`✅ ${result.message}`);
+					
+					setTimeout(() => {
+						infoBox.style.display = 'none';
+					}, 5000);
+					
+					refreshPlayers();
+				}
+			} catch (error) {
+				console.error('Feil ved trekking av outcomes:', error);
+				alert('⚠️ Kunne ikke trekke outcomes. Prøv igjen!');
+			}
+		}
+		
+		function displayLeaderboard() {
+			const container = document.getElementById('leaderboard');
+			const validPlayers = players.filter(p => p.name && p.company);
+			
+			if (validPlayers.length === 0) {
+				container.innerHTML = '<p>Ingen spillere ennå.</p>';
+				return;
+			}
+			
+			// ✅ Sorter etter totalBalance
+			const sorted = [...validPlayers].sort((a, b) => (b.totalBalance || 500000) - (a.totalBalance || 500000));
+			
+			let html = '';
+			sorted.forEach((player, index) => {
+				const rank = index + 1;
+				const isTop3 = rank <= 3;
+				const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+				const balance = player.totalBalance || 500000;
+				
+				html += `
+					<div class="leaderboard-item ${isTop3 ? 'top3' : ''}">
+						<div class="leaderboard-rank">${medal || rank}</div>
+						<div class="leaderboard-info">
+							<strong>${player.name}</strong>
+							<small>${player.company} • Økt ${player.currentSession}</small>
+						</div>
+						<div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+					</div>
+				`;
+			});
+			
+			container.innerHTML = html;
+		}
+
+		function showOutcomes() {
+			const session = parseInt(document.getElementById('outcomesViewSession').value);
+			const container = document.getElementById('outcomesView');
+			
+			// ✅ Filtrer ut ugyldige spillere
+			const validPlayers = players.filter(p => p.name && p.company);
+			
+			if (validPlayers.length === 0) {
+				container.innerHTML = '<p>Ingen spillere ennå.</p>';
+				return;
+			}
+			
+			let html = '';
+			validPlayers.forEach(player => {
+				const choice = session === 1 ? player.session1Choice : player.session2Choice;
+				const outcome = session === 1 ? player.session1Outcome : player.session2Outcome;
+				const amount = session === 1 ? player.session1Amount : player.session2Amount;
+				
+				if (!choice) {
+					return;
+				}
+				
+				const outcomeClass = outcome || 'pending';
+				const outcomeBadge = outcome ? 
+					`<span class="badge ${outcome}">${outcome.toUpperCase()}</span>` : 
+					'<span class="badge" style="background: #999; color: white;">PENDING</span>';
+				
+				const amountText = amount !== undefined ? 
+					`<br><small style="font-weight: 600; color: ${amount >= 0 ? '#28a745' : '#dc3545'};">
+						${amount >= 0 ? '+' : ''}${amount.toLocaleString('no-NO')} NOK
+					</small>` : '';
+				
+				html += `
+					<div class="outcome-item ${outcomeClass}">
+						<strong>${player.name} (${player.company})</strong>
+						<small>Valg: Alternativ ${choice} ${outcomeBadge}</small>
+						${amountText}
+					</div>
+				`;
+			});
+			
+			if (html === '') {
+				container.innerHTML = '<p>Ingen spillere har gjort valg i denne økten ennå.</p>';
+			} else {
+				container.innerHTML = html;
+			}
+		}
+
+		async function refreshPlayers() {
+			try {
+				const response = await fetch(`${SHEETS_API_URL}?action=getAllPlayers`);
+				const data = await response.json();
+
+				if (data.status === 'success') {
+					players = data.players;
+					
+					updatePlayerDropdowns();  // ✅ Må være her
+					displayPlayers();
+					displayLeaderboard();
+					showOutcomes();
+					
+					console.log('✅ Spillere lastet:', players.length);
+				}
+			} catch (error) {
+				console.error('Feil ved lasting av spillere:', error);
+				alert('⚠️ Kunne ikke laste spillere. Sjekk at SHEETS_API_URL er riktig!');
+			}
+		}
+
+		window.addEventListener('load', function() {
+			refreshPlayers();
+		});
+    </script>
+</body>
+</html>

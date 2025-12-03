@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppa Business League - Ekspressversjon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: #F5F7FA;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+		}
+
+        .container {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+			font-size: 2.5rem;
+			color: #00A89E; /* ✅ Tripletex turkis */
+			margin-bottom: 0.5rem;
+			font-weight: 900;
+		}
+
+        .logo p {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .welcome {
+			text-align: center;
+			margin-bottom: 2rem;
+			padding: 1.5rem;
+			background: #EFF6FF;
+			border-radius: 12px;
+			border-left: 4px solid #3B82F6;
+		}
+
+        .welcome h2 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00A651;
+            box-shadow: 0 0 0 3px rgba(0, 166, 81, 0.1);
+        }
+
+        
+		.btn {
+			width: 100%;
+			padding: 1.2rem;
+			background: #00A89E; /* ✅ Tripletex turkis */
+			color: white;
+			border: none;
+			border-radius: 10px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+        .btn:hover {
+			background: #008A82;
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(0, 168, 158, 0.25);
+		}
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .info strong {
+			color: #00A89E; /* ✅ Tripletex turkis */
+		}
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .welcome h2 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>🏆 SUPPA</h1>
+            <p>Business League · Ekspressversjon</p>
+        </div>
+
+        <div class="welcome">
+            <h2>Velkommen til seminaret!</h2>
+            <p>Tre økter med 90 minutter hver. Lær Tripletex gjennom praksis, ta strategiske valg, og konkurrer om topplasseringen! 🚀</p>
+        </div>
+
+        <form id="registrationForm">
+            <div class="form-group" id="nameGroup">
+                <label for="name">Ditt navn</label>
+                <input type="text" id="name" placeholder="Ola Nordmann">
+            </div>
+
+            <div class="form-group">
+                <label for="company">Bedriftsnavn</label>
+                <input type="text" id="company" placeholder="Nordmann Solutions AS" required>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Start spillet 🎯</button>
+        </form>
+
+        <div class="info">
+            <strong>Husk:</strong> Bedriftsnavnet ditt er din innlogging! <span id="modeHint">Første gang? Fyll ut begge felt.</span>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ VIKTIG: Erstatt med din Google Apps Script URL
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwiBt51BJNbOqPbpoNzO75Qi3koCHkN7knIy-K1MKYxqybSDiFtPE4qr_rqN2IfiAZAfg/exec';
+        // Du finner URL-en etter å ha deployed Apps Script
+        // Se SHEETS_SETUP.md for instruksjoner
+        
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const companyInput = document.getElementById('company');
+        const nameGroup = document.getElementById('nameGroup');
+        const submitBtn = document.getElementById('submitBtn');
+        const modeHint = document.getElementById('modeHint');
+
+        let isReturningPlayer = false;
+        let existingPlayerData = null;
+
+        // Sjekk om bedriften finnes når brukeren skriver
+        companyInput.addEventListener('blur', async function() {
+            const company = companyInput.value.trim();
+            if (!company) return;
+
+            try {
+                // Check Google Sheets for existing player
+                const response = await fetch(`${SHEETS_API_URL}?action=getPlayer&company=${encodeURIComponent(company)}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Bedriften finnes - innlogging
+                    isReturningPlayer = true;
+                    existingPlayerData = data.player;
+                    nameGroup.style.display = 'none';
+                    nameInput.required = false;
+                    submitBtn.textContent = 'Logg inn 🎯';
+                    modeHint.textContent = 'Velkommen tilbake!';
+                    nameInput.value = data.player.name;
+                } else {
+                    // Ny bedrift - registrering
+                    isReturningPlayer = false;
+                    existingPlayerData = null;
+                    nameGroup.style.display = 'block';
+                    nameInput.required = true;
+                    submitBtn.textContent = 'Registrer deg 🎯';
+                    modeHint.textContent = 'Første gang? Fyll ut begge felt.';
+                }
+            } catch (error) {
+                console.error('Feil ved sjekk av bedrift:', error);
+                // Fallback til registrering ved feil
+                isReturningPlayer = false;
+                existingPlayerData = null;
+                nameGroup.style.display = 'block';
+                nameInput.required = true;
+            }
+        });
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = nameInput.value.trim();
+            const company = companyInput.value.trim();
+            
+            if (!company) {
+                alert('Vennligst fyll ut bedriftsnavn!');
+                return;
+            }
+
+            if (!isReturningPlayer && !name) {
+                alert('Første gang? Fyll ut navnet ditt også!');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Laster...';
+
+            try {
+                if (!isReturningPlayer) {
+                    // Ny registrering - POST til Sheets
+                    const response = await fetch(SHEETS_API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'register',
+                            name: name,
+                            company: company
+                        })
+                    });
+                    
+                    // no-cors means we can't read response, but request was sent
+                    console.log('✅ Registrering sendt til Sheets');
+                    
+                    // Lagre lokalt også (for offline-bruk)
+                    localStorage.setItem('suppa_current_player', company);
+                    localStorage.setItem('suppa_player_name', name);
+                    
+                    // Redirect to game
+                    window.location.href = 'game.html';
+                    
+                } else {
+                    // Innlogging - bare lagre lokalt
+                    localStorage.setItem('suppa_current_player', company);
+                    localStorage.setItem('suppa_player_name', existingPlayerData.name);
+                    
+                    console.log('✅ Innlogging:', company);
+                    
+                    // Redirect to game
+                    window.location.href = 'game.html';
+                }
+                
+            } catch (error) {
+                console.error('Feil ved registrering/innlogging:', error);
+                alert('⚠️ Kunne ikke koble til serveren. Prøv igjen!');
+                submitBtn.disabled = false;
+                submitBtn.textContent = isReturningPlayer ? 'Logg inn 🎯' : 'Registrer deg 🎯';
+            }
+        });
+
+        // Auto-fyll hvis bruker er logget inn
+        window.addEventListener('load', async function() {
+            const currentPlayer = localStorage.getItem('suppa_current_player');
+            if (currentPlayer) {
+                companyInput.value = currentPlayer;
+                await companyInput.dispatchEvent(new Event('blur')); // Trigger login check
+            }
+        });
+    </script>
+</body>
+</html>
