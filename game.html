@@ -496,6 +496,69 @@
 		.balance-table td strong {
 			color: #00A89E;
 		}
+
+		.leaderboard-container {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			
+		}
+		
+		.leaderboard-container h3 {
+		    color: #00A651;
+		    margin-bottom: 1rem;
+		}
+		
+		.leaderboard-item {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    padding: 0.75rem 1rem;
+		    margin-bottom: 0.5rem;
+		    background: #f8f9fa;
+		    border-radius: 8px;
+		    border-left: 4px solid #00A651;
+		}
+		
+		.leaderboard-item.top3 {
+		    background: linear-gradient(135deg, #fff9e6, #fff3cd);
+		    border-left-color: #ffc107;
+		}
+		
+		.leaderboard-item.me {
+		    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+		    border-left-color: #00A651;
+		}
+		
+		.leaderboard-rank {
+		    font-size: 1.5rem;
+		    font-weight: 900;
+		    color: #00A651;
+		    min-width: 40px;
+		}
+		
+		.leaderboard-info {
+		    flex-grow: 1;
+		    margin-left: 1rem;
+		}
+		
+		.leaderboard-info strong {
+		    display: block;
+		    color: #333;
+		}
+		
+		.leaderboard-info small {
+		    color: #666;
+		    font-size: 0.85rem;
+		}
+		
+		.leaderboard-points {
+		    font-size: 1.2rem;
+		    font-weight: 900;
+		    color: #00A651;
+		}
     </style>
 </head>
 <body>
@@ -520,6 +583,11 @@
             <!-- Content lastes dynamisk her -->
         </div>
     </div>
+
+	<div class="leaderboard-container">
+	    <h3>🏆 Leaderboard</h3>
+	    <div id="leaderboard">Laster...</div>
+	</div>
 
     <script>
         // ⚠️ VIKTIG: Erstatt med din Google Apps Script URL
@@ -1137,6 +1205,55 @@ const SESSIONS = {
 				toggle.classList.remove('open');
 			}
 		}
+
+		async function loadLeaderboard() {
+    try {
+        const data = await jsonpRequest(SHEETS_API_URL, { action: 'getAllPlayers' });
+        if (data.status === 'success') {
+            displayLeaderboard(data.players);
+        }
+    } catch (error) {
+        console.error('Feil ved lasting av leaderboard:', error);
+    }
+}
+
+function displayLeaderboard(players) {
+    const container = document.getElementById('leaderboard');
+    const validPlayers = players.filter(p => p.name && p.company);
+    
+    if (validPlayers.length === 0) {
+        container.innerHTML = '<p>Ingen spillere ennå.</p>';
+        return;
+    }
+    
+    const sorted = [...validPlayers].sort((a, b) => (b.totalBalance || 250000) - (a.totalBalance || 250000));
+    
+    let html = '';
+    sorted.forEach((player, index) => {
+        const rank = index + 1;
+        const isTop3 = rank <= 3;
+        const isMe = player.company === currentPlayer?.company;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+        const balance = player.totalBalance || 250000;
+        
+        html += `
+            <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
+                <div class="leaderboard-rank">${medal || rank}</div>
+                <div class="leaderboard-info">
+                    <strong>${player.name}</strong>
+                    <small>${player.company}</small>
+                </div>
+                <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+		loadLeaderboard();
+		setInterval(loadLeaderboard, 30000); // Oppdater hvert 30. sek
+		
     </script>
 </body>
 </html>
