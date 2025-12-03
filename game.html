@@ -566,25 +566,19 @@
 const SESSIONS = {
     1: {
         title: 'Økt 1: Oppstart',
-        intro: 'Gratulerer! Suppa Ventures har investert i bedriften din. Kravet? Du fører regnskapet selv i Tripletex. Alt du ikke gjør, fakturerer regnskapsføreren - og det er ikke billig. Oppstartspakken hans koster 17 000 kr. Bevis at du klarer det selv!',
+        intro: 'Gratulerer! Suppa Ventures har investert i bedriften din. Kravet? Du fører regnskapet selv i Tripletex. Alt du ikke gjør, fakturerer regnskapsføreren - og det er ikke billig. Oppstartspakken hans koster 17 000 kr. Bevis at du klarer det selv!<br><br>💡 <strong>Tips:</strong> Bruk Tripletex sin Support og AI-assistent om du står fast!',
         tasks: [
             {
-                title: 'Opprett åpningsbalanse som balanserer per 01/01-25',
+                title: 'Opprett åpningsbalanse',
                 type: 'table',
                 reward: 0,
                 penalty: 8000,
-                desc: 'Opprett en åpningsbalanse som balanserer. Under finner du oversikt over kontoer og beløp.',
+                desc: 'Opprett en åpningsbalanse som balanserer per 01/01-25.',
                 tableData: [
-                    { account: '1920', description: 'Bankinnskudd', amount: '505 000', side: 'debet' },
-                    { account: '1230', description: 'Vare- og lastebiler', amount: '35 000', side: 'debet' },
-                    { account: '1250', description: 'Inventar', amount: '25 000', side: 'debet' },
-                    { account: '1040', description: 'Lisenser, ervervet', amount: '20 000', side: 'debet' },
+                    { account: '1920', description: 'Bankinnskudd', amount: '250 000', side: 'debet' },
                     { account: '', description: '---', amount: '---', side: '' },
-                    { account: '2000', description: 'Aksjekapital', amount: '50 000', side: 'kredit' },
-                    { account: '2020', description: 'Overkurs', amount: '502 500', side: 'kredit' },
-                    { account: '2579', description: 'Annen kortsiktig gjeld', amount: '30 000', side: 'kredit' },
-                    { account: '2400', description: 'Leverandørgjeld', amount: '20 000', side: 'kredit' },
-                    { account: '???', description: 'Din ansatte Kontor Assistent skylder deg penger. Dette burde nok legges i ansattreskontro til vedkommende...', amount: '17 500', side: 'debet' }
+                    { account: '2000', description: 'Aksjekapital', amount: '30 000', side: 'kredit' },
+                    { account: '2020', description: 'Overkurs', amount: '220 000', side: 'kredit' }
                 ]
             },
             {
@@ -592,204 +586,98 @@ const SESSIONS = {
                 type: 'text',
                 reward: 0,
                 penalty: 2000,
-                desc: `<strong>Uhellet er ute! 💸</strong><br><br>
-                Det har kommet en faktura i posten fra "Nordic IT Solutions AS" på 12 500 kr inkl. MVA for "systemlisenser og oppsett."<br><br>
-                Problemet? Du husker ikke å ha bestilt noe fra dem, og fakturabeløpet virker mistenkelig høyt. Kontaktperson på fakturaen svarer ikke på telefon.<br><br>
-                Regnskapsføreren din sier: "Registrer den uansett - vi må ha kontroll på hva som kommer inn. Men ikke betal før du har undersøkt!"<br><br>
-                <strong>Oppgave:</strong> Registrer fakturaen i leverandørmodulen. Ikke godkjenn betaling ennå.`
+                desc: '<strong>Uhellet er ute! 💸</strong><br><br>Det har kommet en faktura i posten fra "Nordic IT Solutions AS" på 12 500 kr inkl. MVA for "systemlisenser og oppsett."<br><br>Problemet? Du husker ikke å ha bestilt noe fra dem, og fakturabeløpet virker mistenkelig høyt. Kontaktperson på fakturaen svarer ikke på telefon.<br><br>Regnskapsføreren din sier: "Registrer den uansett - vi må ha kontroll på hva som kommer inn. Men ikke betal før du har undersøkt!"<br><br><strong>Oppgave:</strong> Bokfør leverandørfakturaen.'
             },
             {
-                title: 'Manuell føring (utgift)',
-                type: 'text',
-                reward: 0,
-                penalty: 2000,
-                desc: `En håndverker måtte gjøre en liten, akutt reparasjon (skifte lås i døra). Han krevde betaling på stedet, 2 500 kr kontant. 🔧<br><br>
-                <strong>Oppgave:</strong> Før et manuelt bilag for transaksjonen. 📜`
-            },
-            {
-                title: 'Manuell føring (inntekt)',
+                title: 'Inntektsbilag',
                 type: 'text',
                 reward: 7500,
                 penalty: 0,
-                desc: `<strong>Ping! Ny e-post 📧</strong><br><br>
-                "Hei! Har nå endelig betalt fakturaen fra november i fjor - beklager at det tok tid!"<br><br>
-                Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br>
-                <strong>Oppgave:</strong> Før et manuelt bilag for inntekten på 7 500 kr.`
+                desc: '<strong>Ping! Ny e-post 📧</strong><br><br>"Hei! Har nå endelig betalt fakturaen fra november i fjor - beklager at det tok tid!"<br><br>Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br><strong>Oppgave:</strong> Registrer betalingen på 7 500 kr i Tripletex.'
+            },
+            {
+                title: 'Opprett din første kunde',
+                type: 'text',
+                reward: 0,
+                penalty: 2000,
+                desc: '<strong>Din første kunde! 🎉</strong><br><br>En kunde har tatt kontakt og trenger hjelp. Før du kan fakturere må du opprette kunden i systemet.<br><br><strong>Oppgave:</strong> Opprett en kunde i Tripletex med navn og kontaktinfo.'
             },
             {
                 title: 'Din første faktura',
                 type: 'text',
                 reward: 20000,
                 penalty: 5000,
-                desc: `<strong>Din første kunde har ringt! 🎉</strong><br><br>
-                En potensiell kunde trenger umiddelbart hjelp. De er desperate - et kritisk prosjekt har stoppet opp og de trenger noen som kan levere raskt.<br><br>
-                "Vi betaler hva som helst for å få dette på plass," sa de da telefonen ringte tidlig i morges. "Men vi har hatt leverandører som fakturerte med feil MVA-kode - de mistet kontrakten umiddelbart. Sørg for at det er riktig."<br><br>
-                Du legger på og innser at du aldri har sendt en faktura fra Tripletex før. Regnskapsføreren din minner deg på: "Husk å sette opp fakturamal med logo og selskapsinfo først - førsteinntrykket teller når du skal bygge kunderelasjoner."<br><br>
-                <strong>Oppgave del 1:</strong> Last opp din bedrifts logo til fakturamal og tilpass oppsettet med korrekt selskapsinfo.<br><br>
-                <strong>Oppgave del 2:</strong> Aktiver riktig MVA-status for fakturering i Tripletex.<br><br>
-                <strong>Oppgave del 3:</strong> Send din første faktura på 20 000 kr ekskl. mva for din første leveranse.<br><br>
-                <small>*Regnskapsføreren din har gitt beskjed at han enda ikke er kjent med produktmodulen i Tripletex, og foretrekker at du ikke begynner å bruke den enda..</small>`
+                desc: '<strong>På tide å fakturere! 💰</strong><br><br>Kunden trenger umiddelbart hjelp med et kritisk prosjekt.<br><br>"Vi betaler hva som helst for å få dette på plass," sa de. "Men sørg for at fakturaen er korrekt - vi har droppet leverandører som rotet med MVA."<br><br>Regnskapsføreren minner deg på: "Husk å sette opp fakturamal med logo først - førsteinntrykket teller!"<br><br><strong>Oppgave del 1:</strong> Last opp logo og tilpass fakturamal med selskapsinfo.<br><br><strong>Oppgave del 2:</strong> Aktiver muligheten for å bruke MVA-koder.<br><br><strong>Oppgave del 3:</strong> Send faktura på 25 000 kr inkl. mva.'
             }
         ],
-        choices: [
-            {
-                letter: 'A',
-                title: 'BlockNorth Krypto',
-                desc: 'Invester 100 000 NOK i kryptovaluta. Potensielt 20% avkastning, men høy risiko for tap.'
-            },
-            {
-                letter: 'B',
-                title: 'Høyrentekonto',
-                desc: 'Plasser 100 000 NOK på høyrentekonto. Garantert 5% avkastning, trygt og forutsigbart.'
-            }
-        ]
+        choices: []
     },
     2: {
         title: 'Økt 2: Drift',
-        intro: 'Bedriften er i gang! Nå skal du håndtere ansatte, internasjonale kunder, reiser og prosjekter. Resultatet av investeringsvalget ditt fra økt 1 vises når økten starter.',
+        intro: 'Bedriften er i gang! Nå skal du håndtere ansatte, prosjekter og reiser.<br><br>💡 <strong>Tips:</strong> Bruk Tripletex sin Support og AI-assistent om du står fast!',
         tasks: [
             {
-                title: 'Opprette ansatte',
+                title: 'Opprett ansatt',
                 type: 'text',
                 reward: 0,
                 penalty: 5000,
-                desc: `<strong>Oppgave:</strong> Opprett 3 ansatte i Tripletex:<br><br>
-                <strong>ANSATT 1 - Kontor Assistent:</strong><br>
-                • Fast månedslønn: 35 000 kr<br>
-                • Månedlig tillegg "Pendlerparkering": 500 kr<br><br>
-                <strong>ANSATT 2 - Konsul Ent:</strong><br>
-                • Timelønn: 450 kr/time<br><br>
-                <strong>ANSATT 3 - Regnskaps Sjef:</strong><br>
-                • Fast årslønn: 575 000 kr`
-            },
-            {
-                title: 'Bankintegrasjon',
-                type: 'text',
-                reward: 0,
-                penalty: 2000,
-                desc: `Din revisor ringte: "Bruker du virkelig manuell bankoverføring som en hobbyregnskapsfører?"<br><br>
-                <strong>Oppgave:</strong><br>
-                • Sett opp bankintegrasjon via Autopay<br>
-                • Aktiver KID-nummer på fakturaer`
-            },
-            {
-                title: 'Internasjonal kunde',
-                type: 'text',
-                reward: 55000,
-                penalty: 0,
-                desc: `Telefonen ringte klokka 08:15 med engelsk aksent: "We need immediate consulting services and prefer invoicing in EUR."<br><br>
-                Dette er din første utenlandske kunde! Regnskapsføreren din var krystallklar: "EUR-fakturaer må håndteres på egen bankkonto for valutaseparasjon. Ikke bland valutaer!"<br><br>
-                <strong>Oppgave:</strong><br>
-                • Opprett ny bankkonto for EUR-transaksjoner<br>
-                • Send faktura på <strong>5 000 EUR</strong> (0% MVA) for "Consulting Services"`
+                desc: '<strong>Du trenger hjelp! 👔</strong><br><br>Bedriften vokser og du trenger en ansatt.<br><br><strong>Oppgave:</strong> Opprett en fastlønnet ansatt i Tripletex:<br>• Fast månedslønn: 45 000 kr<br>• Legg inn skattekort (Tabellkort, tabell 7100)'
             },
             {
                 title: 'Opprett prosjekt',
                 type: 'text',
                 reward: 0,
                 penalty: 2000,
-                desc: `<strong>Kunden fra økt 1 er fornøyd! 🎉</strong><br><br>
-                "Vi vil gjerne fortsette samarbeidet. Kan dere sende noen til Trondheim for å planlegge fase 2?"<br><br>
-                Din nyansatte Konsul Ent tar oppdraget. Men først trenger du struktur på prosjektet.<br><br>
-                <strong>Oppgave:</strong> Opprett et timeprosjekt for kunden.`
+                desc: '<strong>Kunden fra økt 1 er fornøyd! 🎉</strong><br><br>"Vi vil gjerne fortsette samarbeidet. Kan dere sende noen for å planlegge fase 2?"<br><br>Din ansatte tar oppdraget. Men først trenger du struktur på prosjektet.<br><br><strong>Oppgave:</strong> Opprett et timeprosjekt for kunden.'
             },
             {
-                title: 'Reiseregning med viderefakturering',
+                title: 'Reiseregning',
                 type: 'text',
-                reward: 980,
+                reward: 0,
                 penalty: 3000,
-                desc: `Konsul Ent er tilbake fra Trondheim. Nå må reisen føres - og deler av den kan faktureres videre til kunden.<br><br>
-                <strong>Oppgave:</strong> Før en reiseregning knyttet til prosjektet:<br>
-                • <strong>Kostgodtgjørelse:</strong> Overnatting over 12 timer - innland, trekk frokost<br>
-                • <strong>Kjøring:</strong> Oslo-Trondheim-Oslo, ≈ 494 km<br>
-                • <strong>Kundemiddag:</strong> 980 kr - viderefakturer til kunden<br>
-                • <strong>Taxi:</strong> 345 kr<br>
-                • Godkjenn reiseregningen`
+                desc: 'Din ansatte har vært på kundebesøk. Nå må reisen føres.<br><br><strong>Oppgave:</strong> Før en reiseregning knyttet til prosjektet:<br>• Kostgodtgjørelse: Overnatting over 12 timer - innland<br>• Kjøring: 500 km<br>• Godkjenn reiseregningen'
             },
             {
-                title: 'Timeføring og fakturering',
+                title: 'Timeføring og viderefakturering',
                 type: 'text',
-                reward: 18000,
+                reward: 18980,
                 penalty: 0,
-                desc: `Konsul Ent jobbet 40 timer på prosjektet i Trondheim.<br><br>
-                <strong>Oppgave:</strong><br>
-                • Før 40 timer à 450 kr/time på prosjektet<br>
-                • Fakturer timer og viderefakturerbare utlegg til kunden`
+                desc: 'Din ansatte jobbet på prosjektet og reisekostnader skal viderefaktureres.<br><br><strong>Oppgave:</strong><br>• Før 40 timer à 450 kr/time på prosjektet<br>• Fakturer timer og reisekostnader til kunden'
             }
         ],
-        choices: [
-            {
-                letter: 'A',
-                title: 'Sponsor lokal idrettsklubb',
-                desc: 'Gi 50 000 NOK i sponsing. Kan gi PR-boom og nye kunder, eller ingen effekt.'
-            },
-            {
-                letter: 'B',
-                title: 'Google Ads-kampanje',
-                desc: 'Invester 50 000 NOK i digital markedsføring. Kan gi leads, eller bare koste penger.'
-            }
-        ]
+        choices: []
     },
     3: {
         title: 'Økt 3: Månedsavslutning',
-        intro: 'Siste økt! Nå skal du kjøre lønn, sette opp abonnementer og avslutte måneden. Resultatet av markedsføringsvalget ditt fra økt 2 vises når økten starter.',
+        intro: 'Siste økt! Nå skal du kjøre lønn, sette opp abonnementer og avslutte måneden.<br><br>💡 <strong>Tips:</strong> Bruk Tripletex sin Support og AI-assistent om du står fast!',
         tasks: [
-            {
-                title: 'Fagforening og skattekort',
-                type: 'text',
-                reward: 0,
-                penalty: 4000,
-                desc: `Før du kan kjøre lønn må et par ting på plass.<br><br>
-                <strong>Del 1 - Fagforening:</strong><br>
-                Regnskaps Sjef er medlem i Økonomiforbundet. Opprett fagforeningen med:<br>
-                • Fagforeningskontingent: 1,7% av bruttolønn<br>
-                • Forsikringsbeløp: 815 kr<br>
-                • Knytt Regnskaps Sjef til fagforeningen<br><br>
-                <strong>Del 2 - Skattekort:</strong><br>
-                Legg inn skattekort for alle tre ansatte:<br>
-                • Kontor Assistent: Tabellkort, tabell 7100<br>
-                • Konsul Ent: Tabellkort, tabell 7100<br>
-                • Regnskaps Sjef: Tabellkort, tabell 7100`
-            },
             {
                 title: 'Lønnskjøring',
                 type: 'text',
                 reward: 0,
                 penalty: 8000,
-                desc: `<strong>Det er lønningsdag! 💰</strong><br><br>
-                De ansatte venter på lønna si. Alt du har satt opp til nå blir testet.<br><br>
-                <strong>Oppgave:</strong><br>
-                • Opprett lønnskjøring for alle tre ansatte<br>
-                • Kontroller at fagforeningstrekk og skatt er korrekt<br>
-                • Godkjenn og kjør lønn med bankintegrasjon`
+                desc: '<strong>Det er lønningsdag! 💰</strong><br><br>Din ansatte venter på lønna si.<br><br><strong>Oppgave:</strong><br>• Opprett lønnskjøring for den ansatte<br>• Kontroller at skatt er korrekt<br>• Godkjenn og utbetal lønn'
             },
+			{
+			    title: 'Reverser feilfaktura',
+			    type: 'text',
+			    reward: 0,
+			    penalty: 2000,
+			    desc: '<strong>Mysterie løst! 🔍</strong><br><br>Husker du den mistenkelige fakturaen fra Nordic IT Solutions AS i økt 1? Du har endelig fått tak i noen - og det viser seg at fakturaen var sendt til feil firma. Den skulle aldri vært til deg.<br><br><strong>Oppgave:</strong> Reverser fakturaen.'
+			},
             {
                 title: 'Abonnementsfakturering',
                 type: 'text',
                 reward: 23000,
                 penalty: 0,
-                desc: `<strong>Recurring revenue! 🔄</strong><br><br>
-                To kunder vil ha faste avtaler. Sett opp abonnementer:<br><br>
-                <strong>ABONNEMENT 1: Serviceavtale</strong><br>
-                • Opprett produkt: 15 000 kr inkl. MVA (25% MVA)<br>
-                • Månedlig fakturering, 12 måneder<br>
-                • Startdato: 01.09.2025<br><br>
-                <strong>ABONNEMENT 2: Supportavtale</strong><br>
-                • Opprett produkt: 8 000 kr ekskl. MVA (0% MVA)<br>
-                • Månedlig fakturering, 6 måneder<br>
-                • Startdato: 01.10.2025<br><br>
-                <strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene med automatisk fakturering.`
+                desc: '<strong>Recurring revenue! 🔄</strong><br><br>To kunder vil ha faste avtaler. Sett opp abonnementer:<br><br><strong>ABONNEMENT 1: Serviceavtale</strong><br>• Opprett produkt: 15 000 kr inkl. MVA<br>• Månedlig fakturering, 12 måneder<br>• Startdato: 01.09.2025<br><br><strong>ABONNEMENT 2: Supportavtale</strong><br>• Opprett produkt: 8 000 kr ekskl. MVA<br>• Månedlig fakturering, 6 måneder<br>• Startdato: 01.10.2025<br><br><strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene.'
             },
             {
                 title: 'Bankavstemming og periodeavslutning',
                 type: 'text',
                 reward: 0,
                 penalty: 5000,
-                desc: `<strong>Måneden er over! 📊</strong><br><br>
-                "Før vi kan lukke måneden må banken være avstemt," sa regnskapsføreren. "Revisor kommer snart og forventer at alt er på plass."<br><br>
-                <strong>Oppgave:</strong><br>
-                • Avstem alle bankkontoer<br>
-                • Lås perioden for måneden`
+                desc: '<strong>Måneden er over! 📊</strong><br><br>"Før vi kan lukke måneden må banken være avstemt," sa regnskapsføreren.<br><br><strong>Oppgave:</strong><br>• Avstem bankkontoer<br>• Lås perioden for måneden'
             }
         ],
         choices: []
