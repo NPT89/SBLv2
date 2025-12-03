@@ -773,7 +773,7 @@ const SESSIONS = {
                 type: 'text',
                 reward: 7500,
                 penalty: 0,
-                desc: '<strong>Ping! Ny e-post 📧</strong><br><br>"Hei! Har nå endelig betalt fakturaen fra september - beklager at det tok tid!"<br><br>Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br><strong>Oppgave:</strong> Bokfør et inntektsbilag og bokfør betalingen på 7 500 kr i Tripletex.'
+                desc: '<strong>Ping! Ny e-post 📧</strong><br><br>"Hei! Har nå endelig betalt fakturaen fra september - beklager at det tok tid!"<br><br>Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br><strong>Oppgave:</strong> Bokfør et inntektsbilag og registrer betalingen på 7 500 kr i Tripletex.'
             },
             {
                 title: 'Opprett din første kunde',
@@ -818,12 +818,12 @@ const SESSIONS = {
                 desc: 'Din ansatte har vært på kundebesøk. Nå må reisen føres.<br><br><strong>Oppgave:</strong> Før en reiseregning knyttet til prosjektet:<br>• Kostgodtgjørelse: Overnatting over 12 timer - innland<br>• Kjøring: 500 km<br>• Godkjenn reiseregningen'
             },
             {
-                title: 'Timeføring og viderefakturering',
-                type: 'text',
-                reward: 18980,
-                penalty: 0,
-                desc: 'Din ansatte jobbet på prosjektet og reisekostnader skal viderefaktureres.<br><br><strong>Oppgave:</strong><br>• Før 40 timer à 450 kr/time på prosjektet<br>• Fakturer timer og reisekostnader til kunden'
-            }
+			    title: 'Timeføring og viderefakturering',
+			    type: 'text',
+			    reward: 30000,
+			    penalty: 0,
+			    desc: 'Din ansatte jobbet på prosjektet og reisekostnader skal viderefaktureres.<br><br><strong>Oppgave:</strong><br>• Før 40 timer på prosjektet<br>• Fakturer timer og reisekostnader til kunden'
+			}
         ],
         choices: []
     },
@@ -846,18 +846,18 @@ const SESSIONS = {
 			    desc: '<strong>Mysterie løst! 🔍</strong><br><br>Husker du den mistenkelige fakturaen fra Nordic IT Solutions AS i økt 1? Du har endelig fått tak i noen - og det viser seg at fakturaen var sendt til feil firma. Den skulle aldri vært til deg.<br><br><strong>Oppgave:</strong> Reverser fakturaen.'
 			},
             {
-                title: 'Abonnementsfakturering',
-                type: 'text',
-                reward: 23000,
-                penalty: 0,
-                desc: '<strong>Recurring revenue! 🔄</strong><br><br>To kunder vil ha faste avtaler. Sett opp abonnementer:<br><br><strong>ABONNEMENT 1: Serviceavtale</strong><br>• Opprett produkt: 15 000 kr inkl. MVA<br>• Månedlig fakturering, 12 måneder<br>• Startdato: 01.09.2025<br><br><strong>ABONNEMENT 2: Supportavtale</strong><br>• Opprett produkt: 8 000 kr ekskl. MVA<br>• Månedlig fakturering, 6 måneder<br>• Startdato: 01.10.2025<br><br><strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene.'
-            },
+			    title: 'Abonnementsfakturering',
+			    type: 'text',
+			    reward: 23000,
+			    penalty: 0,
+			    desc: '<strong>Kunden vil ha fast avtale! 🔄</strong><br><br>Etter kundebesøket er kunden strålende fornøyd. De ringer deg: "Vi vil ha en fast avtale - slipper å tenke på det hver måned!"<br><br>Sett opp abonnementer:<br><br><strong>ABONNEMENT 1: Serviceavtale</strong><br>• Opprett produkt: 15 000 kr inkl. MVA<br>• Månedlig fakturering, 12 måneder<br>• Startdato: 01.09.2025<br><br><strong>ABONNEMENT 2: Supportavtale</strong><br>• Opprett produkt: 8 000 kr ekskl. MVA<br>• Månedlig fakturering, 6 måneder<br>• Startdato: 01.10.2025<br><br><strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene for kunden.'
+			},
             {
                 title: 'Bankavstemming og periodeavslutning',
                 type: 'text',
                 reward: 0,
                 penalty: 5000,
-                desc: '<strong>Måneden er over! 📊</strong><br><br>"Før vi kan lukke måneden må banken være avstemt," sa regnskapsføreren.<br><br><strong>Oppgave:</strong><br>• Avstem bankkontoer<br>• Lås perioden for måneden'
+                desc: '<strong>Måneden er over! 📊</strong><br><br>"Før vi kan lukke måneden må banken være avstemt," sa regnskapsføreren.<br><br><strong>Oppgave:</strong><br>• Avstem bankkontoen<br>• Lås perioden for måneden'
             }
         ],
         choices: []
