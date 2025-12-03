@@ -708,10 +708,10 @@
 	</div>
 
     <script>
-        // ⚠️ VIKTIG: Erstatt med din Google Apps Script URL
+        //
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwiBt51BJNbOqPbpoNzO75Qi3koCHkN7knIy-K1MKYxqybSDiFtPE4qr_rqN2IfiAZAfg/exec';
         
-        // JSONP Helper Function (bypasses CORS)
+        //
         function jsonpRequest(url, params = {}) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonpCallback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
@@ -870,20 +870,13 @@ const SESSIONS = {
     }
 };
 
-        // 🔴 CRITICAL: Log IMMEDIATELY when script loads (not waiting for window.load)
-        console.log('🚨 game.html SCRIPT STARTER NÅ');
-        console.log('📍 SHEETS_API_URL:', SHEETS_API_URL);
-        console.log('🗂️ localStorage current_player:', localStorage.getItem('current_player'));
         
         // Initialize
         window.addEventListener('load', async function() {
-            console.log('🎮 Game.html LOAD EVENT starter...');
             
             const playerCompany = localStorage.getItem('suppa_current_player');
-            console.log('📦 localStorage current_player:', playerCompany);
             
             if (!playerCompany) {
-                console.log('❌ Ingen spiller i localStorage, redirecter til login');
                 window.location.href = 'suppa-express.html';
                 return;
             }
@@ -893,33 +886,22 @@ const SESSIONS = {
             document.getElementById('countdownTimer').textContent = 'Laster...';
 
             try {
-                console.log('🔄 Henter deadlines...');
-                // Fetch deadlines from Sheets (JSONP)
                 const deadlinesData = await jsonpRequest(SHEETS_API_URL, { action: 'getDeadlines' });
-                console.log('📅 Deadlines response:', deadlinesData);
-                
                 if (deadlinesData.status === 'success') {
                     DEADLINES = {
                         1: new Date(deadlinesData.deadlines[1]).getTime(),
                         2: new Date(deadlinesData.deadlines[2]).getTime(),
                         3: new Date(deadlinesData.deadlines[3]).getTime()
                     };
-                    console.log('✅ Deadlines hentet fra Sheets:', DEADLINES);
                 }
 
-                console.log('🔄 Henter spillerdata for:', playerCompany);
-                // Fetch player data from Sheets (JSONP)
                 const playerData = await jsonpRequest(SHEETS_API_URL, { 
                     action: 'getPlayer', 
                     company: playerCompany 
                 });
-                console.log('👤 Player response:', playerData);
                 
                 if (playerData.status === 'success') {
 					currentPlayer = playerData.data;
-					console.log('✅ Spillerdata hentet:', currentPlayer);
-					
-					// Display player info
 					document.getElementById('playerName').textContent = currentPlayer.name;
 					document.getElementById('playerCompany').textContent = currentPlayer.company;
 					document.getElementById('sessionNumber').textContent = currentPlayer.currentSession;
@@ -943,13 +925,8 @@ const SESSIONS = {
                 console.error('❌ Error stack:', error.stack);
                 
                 // Clear localStorage to prevent loop
-                console.log('🗑️ Fjerner localStorage for å unngå loop...');
                 localStorage.removeItem('current_player');
                 localStorage.removeItem('player_name');
-                
-                alert('⚠️ Kunne ikke laste spillerdata. Sjekk at Google Sheets er satt opp riktig.\n\nFeil: ' + error.message + '\n\nSe Console for mer info.');
-                
-                console.log('⬅️ Redirecter tilbake til login...');
                 window.location.href = 'suppa-express.html';
             }
         });
@@ -1207,8 +1184,6 @@ const SESSIONS = {
 				choice: selectedChoice
 			})
 			.then(() => {
-				console.log('✅ Valg lagret til Sheets');
-				
 				currentPlayer[`session${currentPlayer.currentSession}Choice`] = selectedChoice;
 				currentPlayer[`session${currentPlayer.currentSession}ChoiceTime`] = new Date().toISOString();
 
