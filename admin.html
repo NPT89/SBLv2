@@ -775,14 +775,14 @@ async function saveTaskResults() {
 			}
 			
 			// ✅ Sorter etter totalBalance
-			const sorted = [...validPlayers].sort((a, b) => (b.totalBalance || 500000) - (a.totalBalance || 500000));
+			const sorted = [...validPlayers].sort((a, b) => (b.totalBalance || 250000) - (a.totalBalance || 250000));
 			
 			let html = '';
 			sorted.forEach((player, index) => {
 				const rank = index + 1;
 				const isTop3 = rank <= 3;
 				const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
-				const balance = player.totalBalance || 500000;
+				const balance = player.totalBalance || 250000;
 				
 				html += `
 					<div class="leaderboard-item ${isTop3 ? 'top3' : ''}">
