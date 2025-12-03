@@ -555,9 +555,8 @@
 		}
 		
 		.leaderboard-points {
-		    font-size: 1.2rem;
-		    font-weight: 900;
-		    color: #00A651;
+		    font-weight: 700;
+		    color: #333;
 		}
 
 		.leaderboard-sticky {
@@ -594,11 +593,11 @@
 		}
 		
 		.leaderboard-mini-you {
-		    background: linear-gradient(135deg, #00A651, #3B82F6);
-		    color: white;
+		    background: #f0f0f0;
+		    color: #333;
 		    padding: 0.4rem 1rem;
 		    border-radius: 20px;
-		    font-weight: 700;
+		    font-weight: 600;
 		}
 		
 		.leaderboard-toggle {
@@ -701,11 +700,6 @@
             <!-- Content lastes dynamisk her -->
         </div>
     </div>
-
-	<div class="leaderboard-container">
-	    <h3>🏆 Leaderboard</h3>
-	    <div id="leaderboard">Laster...</div>
-	</div>
 
     <script>
         //
@@ -1127,14 +1121,14 @@ const SESSIONS = {
 			const outcomeType = currentPlayer[outcomeKey];
 			
 			const amountKey = `session${sessionNum}Amount`;
-			const actualAmount = currentPlayer[amountKey];  // ✅ Hent faktisk beløp fra Sheets
+			const actualAmount = currentPlayer[amountKey];  
 			
 			if (outcomeType && actualAmount !== undefined) {
 				// Admin har satt outcome og beløp - bruk det
 				const outcomes = resultsForSession[choice];
 				const result = outcomes[outcomeType];
 				
-				// ✅ Overstyr beløp med faktisk beløp fra Sheets
+				// 
 				return {
 					...result,
 					amount: actualAmount
@@ -1176,7 +1170,7 @@ const SESSIONS = {
 			submitBtn.disabled = true;
 			submitBtn.textContent = '⏳ Lagrer...';
 
-			// ✅ Endret til GET med JSONP
+			//
 			jsonpRequest(SHEETS_API_URL, {
 				action: 'saveChoice',
 				company: currentPlayer.company,
@@ -1249,7 +1243,7 @@ const SESSIONS = {
             if (sessionNum === 1) {
                 message = `
                     <h2>🎉 Økt 1 er stengt!</h2>
-                    <p>Takk for innsatsen! Vi jobber nå med å beregne resultatene av investeringsvalgene.</p>
+                    <p>Takk for innsatsen! Vi jobber nå med å beregne resultatene.</p>
                     <p>Resultatet av ditt valg vil vises når du starter økt 2.</p>
                     <div class="status">
                         <strong>💡 Tips:</strong> Ta en pause, men kom tilbake når økt 2 åpner!
@@ -1258,10 +1252,9 @@ const SESSIONS = {
             } else if (sessionNum === 2) {
                 message = `
                     <h2>🎉 Økt 2 er stengt!</h2>
-                    <p>Flott jobbet! Vi beregner nå resultatene av markedsføringsvalgene.</p>
+                    <p>Flott jobbet!.</p>
                     <p>Resultatet vises i økt 3 - siste runde!</p>
                     <div class="status">
-                        <strong>💡 Tips:</strong> Siste økt er den vanskeligste. Forbered deg mentalt! 🧠
                     </div>
                 `;
             } else {
@@ -1270,7 +1263,7 @@ const SESSIONS = {
                     <p>Du har fullført alle tre økter - flott jobbet!</p>
                     <p>Resultater og leaderboard blir publisert når alle er ferdige og vi har rettet oppgavene.</p>
                     <div class="status">
-                        <strong>🏆 Takk for deltakelsen!</strong> Vi ses på premieutdelingen! 🎊
+                        <strong>🏆 Takk for deltakelsen!</strong>
                     </div>
                 `;
             }
