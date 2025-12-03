@@ -741,6 +741,21 @@
     </style>
 </head>
 <body>
+	<div class="welcome-overlay" id="welcomeOverlay" style="display: none;">
+	    <div class="welcome-popup">
+	        <h2>🏆 Velkommen til Suppa Business League!</h2>
+	        <p>Du skal nå føre regnskap for din egen bedrift i <strong>Tripletex</strong>.</p>
+	        <p><strong>Slik gjør du:</strong></p>
+	        <ul>
+	            <li>Gå til <strong>tripletex.no</strong> og logg inn med e-posten din</li>
+	            <li>Gjør oppgavene du ser på skjermen</li>
+	            <li>Jo flere oppgaver du fullfører, jo mer tjener bedriften din</li>
+	        </ul>
+	        <p>💡 Står du fast? Bruk <strong>Support</strong> og <strong>AI-assistenten</strong> i Tripletex!</p>
+	        <button class="btn" onclick="closeWelcome()">Jeg er klar! 🚀</button>
+	    </div>
+	</div>
+	
     <div class="container">
         <div class="header">
             <div class="header-top">
@@ -1469,6 +1484,18 @@ function displayLeaderboard(players) {
     });
     
     document.getElementById('leaderboardFull').innerHTML = html;
+}
+
+		function showWelcomePopup() {
+    // Vis bare for nye spillere (økt 1, ingen valg gjort)
+    if (currentPlayer.currentSession === 1 && !localStorage.getItem('suppa_welcomed_' + currentPlayer.company)) {
+        document.getElementById('welcomeOverlay').style.display = 'flex';
+    }
+}
+
+function closeWelcome() {
+    document.getElementById('welcomeOverlay').style.display = 'none';
+    localStorage.setItem('suppa_welcomed_' + currentPlayer.company, 'true');
 }
 		
     </script>
