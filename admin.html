@@ -574,10 +574,9 @@ async function saveTaskResults() {
 					
 					displayPlayers();
 					displayLeaderboard();
-					showOutcomes();
-					updatePlayerDropdowns();  // ✅ Må være her MED force re-render kode
+					//showOutcomes();
+					updatePlayerDropdowns();  //
 					
-					console.log('✅ Spillere lastet:', players.length);
 				}
 			} catch (error) {
 				console.error('Feil ved lasting av spillere:', error);
