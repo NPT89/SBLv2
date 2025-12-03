@@ -395,35 +395,28 @@
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwiBt51BJNbOqPbpoNzO75Qi3koCHkN7knIy-K1MKYxqybSDiFtPE4qr_rqN2IfiAZAfg/exec';
 		
 		const TASK_DEFINITIONS = {
-			1: [
-				{ id: 1, title: 'Opprett åpningsbalanse', reward: 0, penalty: 40000, type: 'system' },
-				{ id: 2, title: 'Fakturaoppsett', reward: 0, penalty: 30000, type: 'system' },
-				{ id: 3, title: 'MVA-innstillinger', reward: 0, penalty: 20000, type: 'system' },
-				{ id: 4, title: 'Første fakturering', reward: 72000, penalty: 0, type: 'revenue' },
-				{ id: 5, title: 'Før leverandørfaktura', reward: 0, penalty: 35000, type: 'system' },
-				{ id: 6, title: 'Manuell føring', reward: 0, penalty: 25000, type: 'system' },
-				{ id: 7, title: 'Fagforeningsavtale', reward: 0, penalty: 40000, type: 'system' },
-				{ id: 8, title: 'Opprette ansatte', reward: 0, penalty: 40000, type: 'system' }
-			],
-			2: [
-				{ id: 1, title: 'Fagforeningsrettelse', reward: 0, penalty: 50000, type: 'system' },
-				{ id: 2, title: 'Internasjonal kunde', reward: 25000, penalty: 50000, type: 'revenue' },
-				{ id: 3, title: 'Reiseregning og viderefakturering', reward: 37500, penalty: 75000, type: 'revenue' },
-				{ id: 4, title: 'Opprett prosjekter', reward: 50000, penalty: 100000, type: 'revenue' },
-				{ id: 5, title: 'Bankintegrasjon oppsett', reward: 0, penalty: 50000, type: 'system' },
-				{ id: 6, title: 'Manuelt bilag', reward: 0, penalty: 50000, type: 'system' },
-				{ id: 7, title: 'Ny leverandørfaktura', reward: 0, penalty: 25000, type: 'system' },
-				{ id: 8, title: 'Kundeoppfølging og delvis betaling', reward: 17500, penalty: 35000, type: 'revenue' },
-				{ id: 9, title: 'Abonnementsfakturering', reward: 50000, penalty: 100000, type: 'revenue' },
-				{ id: 10, title: 'Første lønnskjøring', reward: 0, penalty: 150000, type: 'system' }
-			],
-			3: [
-				{ id: 1, title: 'Bokfør markedsføringsresultat', reward: 0, penalty: 30000, type: 'system' },
-				{ id: 2, title: 'Avstemming', reward: 0, penalty: 40000, type: 'system' },
-				{ id: 3, title: 'MVA-oppgjør', reward: 0, penalty: 50000, type: 'system' },
-				{ id: 4, title: 'Månedsrapport', reward: 0, penalty: 40000, type: 'system' }
-			]
-		};
+    1: [
+        { id: 1, title: 'Opprett åpningsbalanse', reward: 0, penalty: 8000, type: 'system' },
+        { id: 2, title: 'Før leverandørfaktura', reward: 0, penalty: 2000, type: 'system' },
+        { id: 3, title: 'Manuell føring (utgift)', reward: 0, penalty: 2000, type: 'system' },
+        { id: 4, title: 'Manuell føring (inntekt)', reward: 7500, penalty: 0, type: 'revenue' },
+        { id: 5, title: 'Din første faktura', reward: 20000, penalty: 5000, type: 'revenue' }
+    ],
+    2: [
+        { id: 1, title: 'Opprette ansatte', reward: 0, penalty: 5000, type: 'system' },
+        { id: 2, title: 'Bankintegrasjon', reward: 0, penalty: 2000, type: 'system' },
+        { id: 3, title: 'Internasjonal kunde', reward: 55000, penalty: 0, type: 'revenue' },
+        { id: 4, title: 'Opprett prosjekt', reward: 0, penalty: 2000, type: 'system' },
+        { id: 5, title: 'Reiseregning med viderefakturering', reward: 980, penalty: 3000, type: 'revenue' },
+        { id: 6, title: 'Timeføring og fakturering', reward: 18000, penalty: 0, type: 'revenue' }
+    ],
+    3: [
+        { id: 1, title: 'Fagforening og skattekort', reward: 0, penalty: 4000, type: 'system' },
+        { id: 2, title: 'Lønnskjøring', reward: 0, penalty: 8000, type: 'system' },
+        { id: 3, title: 'Abonnementsfakturering', reward: 23000, penalty: 0, type: 'revenue' },
+        { id: 4, title: 'Bankavstemming og periodeavslutning', reward: 0, penalty: 5000, type: 'system' }
+    ]
+};
 		
 		function updatePlayerDropdowns() {
 			const taskPlayer = document.getElementById('taskPlayer');
