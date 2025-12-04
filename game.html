@@ -670,113 +670,15 @@
 		    transition: all 0.2s ease;
 		}
 
-		.welcome-popup .btn:hover {
-		    background: #008A82;
-		    transform: translateY(-2px);
-		    box-shadow: 0 4px 12px rgba(0, 168, 158, 0.3);
-		}
+.welcome-popup .btn:hover {
+    background: #008A82;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 168, 158, 0.3);
+}
 		
 		.welcome-popup .btn:hover {
 		    transform: translateY(-2px);
 		    box-shadow: 0 5px 20px rgba(0, 166, 81, 0.3);
-		}
-
-		.previous-results {
-		    background: #f8f9fa;
-		    border: 2px solid #e5e7eb;
-		    border-radius: 12px;
-		    margin-bottom: 2rem;
-		    overflow: hidden;
-		}
-		
-		.previous-results-header {
-		    background: #00A89E;
-		    color: white;
-		    padding: 1rem 1.5rem;
-		    cursor: pointer;
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: center;
-		}
-		
-		.previous-results-header:hover {
-		    background: #008A82;
-		}
-		
-		.previous-results-toggle {
-		    font-size: 1.2rem;
-		    transition: transform 0.3s;
-		}
-		
-		.previous-results.open .previous-results-toggle {
-		    transform: rotate(180deg);
-		}
-		
-		.previous-results-content {
-		    max-height: 0;
-		    overflow: hidden;
-		    transition: max-height 0.3s ease;
-		}
-		
-		.previous-results.open .previous-results-content {
-		    max-height: 600px;
-		    padding: 1.5rem;
-		}
-		
-		.task-result-item {
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: center;
-		    padding: 0.75rem 1rem;
-		    margin-bottom: 0.5rem;
-		    background: white;
-		    border-radius: 8px;
-		    border-left: 4px solid #28a745;
-		}
-		
-		.task-result-item.failed {
-		    border-left-color: #dc3545;
-		    background: #fff5f5;
-		}
-		
-		.task-result-icon {
-		    font-size: 1.2rem;
-		    margin-right: 1rem;
-		}
-		
-		.task-result-title {
-		    flex-grow: 1;
-		}
-		
-		.task-result-amount {
-		    font-weight: 600;
-		    font-family: 'Courier New', monospace;
-		}
-		
-		.task-result-amount.positive {
-		    color: #28a745;
-		}
-		
-		.task-result-amount.negative {
-		    color: #dc3545;
-		}
-		
-		.previous-results-summary {
-		    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-		    padding: 1rem;
-		    border-radius: 8px;
-		    margin-top: 1rem;
-		    text-align: center;
-		}
-		
-		.previous-results-summary.negative {
-		    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-		}
-		
-		.previous-results-summary strong {
-		    font-size: 1.3rem;
-		    display: block;
-		    margin-bottom: 0.5rem;
 		}
 		
     </style>
@@ -995,27 +897,6 @@ const SESSIONS = {
     }
 };
 
-		const TASK_DEFINITIONS = {
-    1: [
-        { id: 1, title: 'Opprett åpningsbalanse', reward: 0, penalty: 8000 },
-        { id: 2, title: 'Før leverandørfaktura', reward: 0, penalty: 2000 },
-        { id: 3, title: 'Opprett kunde', reward: 0, penalty: 2000 },
-        { id: 4, title: 'Inntektsbilag', reward: 7500, penalty: 0 },
-        { id: 5, title: 'Din første faktura', reward: 20000, penalty: 5000 }
-    ],
-    2: [
-        { id: 1, title: 'Opprett ansatt', reward: 0, penalty: 5000 },
-        { id: 2, title: 'Opprett prosjekt', reward: 0, penalty: 2000 },
-        { id: 3, title: 'Reiseregning', reward: 0, penalty: 3000 },
-        { id: 4, title: 'Timeføring og viderefakturering', reward: 30000, penalty: 0 }
-    ],
-    3: [
-        { id: 1, title: 'Lønnskjøring', reward: 0, penalty: 8000 },
-        { id: 2, title: 'Reverser feilfaktura', reward: 0, penalty: 2000 },
-        { id: 3, title: 'Abonnementsfakturering', reward: 23000, penalty: 0 },
-        { id: 4, title: 'Bankavstemming og periodeavslutning', reward: 0, penalty: 5000 }
-    ]
-};
         
         // Initialize
         window.addEventListener('load', async function() {
@@ -1093,67 +974,53 @@ const SESSIONS = {
             }
 
             // Build result box if session 2 or 3
-            // Build previous session results if session 2 or 3
-		let previousResultsHtml = '';
-		if (sessionNum === 2 || sessionNum === 3) {
-		    const previousSession = sessionNum - 1;
-		    const completedTasksString = currentPlayer[`session${previousSession}CompletedTasks`];
-		    
-		    if (completedTasksString) {
-		        const completedTaskIds = completedTasksString.split(',').map(id => parseInt(id));
-		        const tasks = TASK_DEFINITIONS[previousSession];
-		        
-		        let tasksHtml = '';
-		        let totalScore = 0;
-		        let completedCount = 0;
-		        
-		        tasks.forEach(task => {
-		            const isCompleted = completedTaskIds.includes(task.id);
-		            const amount = isCompleted ? task.reward : -task.penalty;
-		            totalScore += amount;
-		            if (isCompleted) completedCount++;
-		            
-		            tasksHtml += `
-		                <div class="task-result-item ${isCompleted ? '' : 'failed'}">
-		                    <span class="task-result-icon">${isCompleted ? '✅' : '❌'}</span>
-		                    <div class="task-result-title">${task.title}</div>
-		                    <div class="task-result-amount ${amount >= 0 ? 'positive' : 'negative'}">
-		                        ${amount >= 0 ? '+' : ''}${amount.toLocaleString('no-NO')} kr
-		                    </div>
-		                </div>
-		            `;
-		        });
-		        
-		        const summaryClass = totalScore >= 0 ? '' : 'negative';
-		        
-		        previousResultsHtml = `
-		            <div class="previous-results" id="previousResults">
-		                <div class="previous-results-header" onclick="togglePreviousResults()">
-		                    <div>
-		                        <strong>📊 Resultater fra økt ${previousSession}</strong>
-		                    </div>
-		                    <div class="previous-results-toggle">▼</div>
-		                </div>
-		                <div class="previous-results-content">
-		                    ${tasksHtml}
-		                    <div class="previous-results-summary ${summaryClass}">
-		                        <strong>${totalScore >= 0 ? '+' : ''}${totalScore.toLocaleString('no-NO')} kr</strong>
-		                        <div>Du klarte ${completedCount} av ${tasks.length} oppgaver</div>
-		                    </div>
-		                </div>
-		            </div>
-		        `;
-		    }
-		}
+            let resultHtml = '';
+            if (sessionNum === 2 || sessionNum === 3) {
+                const previousSession = sessionNum - 1;
+                const previousChoice = currentPlayer[`session${previousSession}Choice`];
+                
+                if (previousChoice) {
+                    // Get result - for now simulate with random outcome
+                    // TODO: Later this will be fetched from Google Sheets based on admin's decision
+                    const result = getResultForChoice(previousSession, previousChoice);
+                    
+                    if (result) {
+                        const resultClass = result.amount > 0 ? 'positive' : result.amount < 0 ? 'negative' : '';
+                        const amountClass = result.amount > 0 ? 'positive' : result.amount < 0 ? 'negative' : '';
+                        const amountPrefix = result.amount > 0 ? '+' : '';
+                        
+                        resultHtml = `
+                            <div class="result-box ${resultClass}">
+                                <div class="result-header">
+                                    <div class="result-icon">${result.icon}</div>
+                                    <div class="result-title">
+                                        <h3>${result.title}</h3>
+                                        <div class="your-choice">Ditt valg fra økt ${previousSession}: Alternativ ${previousChoice}</div>
+                                    </div>
+                                </div>
+                                <div class="result-narrative">
+                                    ${result.narrative}
+                                </div>
+                                <div class="result-amount ${amountClass}">
+                                    ${amountPrefix}${result.amount.toLocaleString('no-NO')} NOK
+                                </div>
+                                <div class="result-instruction">
+                                    <strong>📝 Bokføringsoppgave:</strong> ${result.booking}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
 
             // Show session content
             let html = `
-			    <h1 class="session-title">${session.title}</h1>
-			    <div class="session-intro">
-			        <p>${session.intro}</p>
-			    </div>
-			
-			    ${previousResultsHtml}
+                <h1 class="session-title">${session.title}</h1>
+                <div class="session-intro">
+                    <p>${session.intro}</p>
+                </div>
+
+                ${resultHtml}
 
                 <div class="tasks-section">
 					<h3>📋 Oppgaver i Tripletex</h3>
@@ -1458,10 +1325,6 @@ const SESSIONS = {
 				details.style.display = 'none';
 				toggle.classList.remove('open');
 			}
-		}
-
-		function togglePreviousResults() {
-		    document.getElementById('previousResults').classList.toggle('open');
 		}
 
 		async function loadLeaderboard() {
