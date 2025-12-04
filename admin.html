@@ -504,12 +504,12 @@ async function saveTaskResults() {
     
     tasks.forEach(task => {
         const checkbox = document.getElementById(`task-${task.id}`);
-        if (checkbox && checkbox.checked) {
+        if (checkbox.checked) {
             completedTasks.push(task.id);
         }
     });
     
-    const confirmed = confirm(`Lagre resultat for ${playerCompany} i økt ${session}?`);
+    const confirmed = confirm(`Lagre resultat for ${playerCompany} i økt ${session}?\n\nDette oppdaterer deres saldo.`);
     if (!confirmed) return;
     
     try {
@@ -522,14 +522,14 @@ async function saveTaskResults() {
         });
         
         if (result.status === 'success') {
-            alert(`✅ Lagret! ${result.completed}/${result.total} oppgaver`);
+            alert(`✅ ${result.message}\n\n${result.completed}/${result.total} oppgaver løst`);
             refreshPlayers();
         } else {
-            alert('❌ Feil: ' + result.message);
+            alert('⚠️ Feil: ' + result.message);
         }
     } catch (error) {
         console.error('Feil:', error);
-        alert('❌ Kunne ikke lagre');
+        alert('⚠️ Kunne ikke lagre resultat');
     }
 }
 		
@@ -565,22 +565,23 @@ async function saveTaskResults() {
         });
 
         async function refreshPlayers() {
-		    try {
-		        const data = await jsonpRequest(SHEETS_API_URL, { action: 'getAllPlayers' });
-		
-		        if (data.status === 'success') {
-		            players = data.players;
-		            
-		            updatePlayerDropdowns(); 
-		            displayPlayers();
-		            displayLeaderboard();
-		            
-		            console.log('✅ Spillere lastet:', players.length);
-		        }
-		    } catch (error) {
-		        console.error('Feil ved lasting av spillere:', error);
-		        alert('⚠️ Kunne ikke laste spillere');
-		    }
+			try {
+				const response = await fetch(`${SHEETS_API_URL}?action=getAllPlayers`);
+				const data = await response.json();
+
+				if (data.status === 'success') {
+					players = data.players;
+					
+					displayPlayers();
+					displayLeaderboard();
+					//showOutcomes();
+					updatePlayerDropdowns(); 
+					
+				}
+			} catch (error) {
+				console.error('Feil ved lasting av spillere:', error);
+				alert('⚠️ Kunne ikke laste spillere. Sjekk at SHEETS_API_URL er riktig!');
+			}
 		}
 
         function updatePlayerDropdowns() {
