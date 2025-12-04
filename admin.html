@@ -513,21 +513,13 @@ async function saveTaskResults() {
     if (!confirmed) return;
     
     try {
-        // Bruk JSONP istedenfor fetch
-        const params = new URLSearchParams({
+        const result = await jsonpRequest(SHEETS_API_URL, {
             action: 'saveTaskResults',
             company: playerCompany,
             session: session,
             completedTasks: completedTasks.join(','),
             taskDefinitions: JSON.stringify(tasks)
         });
-        
-        // Hack: Send som GET istedenfor POST
-        const response = await fetch(`${SHEETS_API_URL}?${params.toString()}`, {
-            method: 'GET'
-        });
-        
-        const result = await response.json();
         
         if (result.status === 'success') {
             alert(`✅ Lagret! ${result.completed}/${result.total} oppgaver`);
@@ -573,23 +565,22 @@ async function saveTaskResults() {
         });
 
         async function refreshPlayers() {
-			try {
-				const response = await fetch(`${SHEETS_API_URL}?action=getAllPlayers`);
-				const data = await response.json();
-
-				if (data.status === 'success') {
-					players = data.players;
-					
-					displayPlayers();
-					displayLeaderboard();
-					//showOutcomes();
-					updatePlayerDropdowns(); 
-					
-				}
-			} catch (error) {
-				console.error('Feil ved lasting av spillere:', error);
-				alert('⚠️ Kunne ikke laste spillere. Sjekk at SHEETS_API_URL er riktig!');
-			}
+		    try {
+		        const data = await jsonpRequest(SHEETS_API_URL, { action: 'getAllPlayers' });
+		
+		        if (data.status === 'success') {
+		            players = data.players;
+		            
+		            updatePlayerDropdowns(); 
+		            displayPlayers();
+		            displayLeaderboard();
+		            
+		            console.log('✅ Spillere lastet:', players.length);
+		        }
+		    } catch (error) {
+		        console.error('Feil ved lasting av spillere:', error);
+		        alert('⚠️ Kunne ikke laste spillere');
+		    }
 		}
 
         function updatePlayerDropdowns() {
