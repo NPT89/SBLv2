@@ -522,9 +522,9 @@ async function saveTaskResults() {
         });
         
         if (result.status === 'success') {
-            alert(`✅ ${result.message}\n\n${result.completed}/${result.total} oppgaver løst`);
-            refreshPlayers();
-        } else {
+		    alert(`✅ ${result.message}\n\n${result.completed}/${result.total} oppgaver løst\nScore: ${result.score} kr`);
+		    refreshPlayers();
+		} else {
             alert('⚠️ Feil: ' + result.message);
         }
     } catch (error) {
