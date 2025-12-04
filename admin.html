@@ -504,32 +504,38 @@ async function saveTaskResults() {
     
     tasks.forEach(task => {
         const checkbox = document.getElementById(`task-${task.id}`);
-        if (checkbox.checked) {
+        if (checkbox && checkbox.checked) {
             completedTasks.push(task.id);
         }
     });
     
-    const confirmed = confirm(`Lagre resultat for ${playerCompany} i økt ${session}?\n\nDette oppdaterer deres saldo.`);
+    const confirmed = confirm(`Lagre resultat for ${playerCompany} i økt ${session}?`);
     if (!confirmed) return;
     
     try {
-        const result = await jsonpRequest(SHEETS_API_URL, {
-            action: 'saveTaskResults',
-            company: playerCompany,
-            session: session,
-            completedTasks: completedTasks.join(','),
-            taskDefinitions: JSON.stringify(tasks)
+        const response = await fetch(SHEETS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'saveTaskResults',
+                company: playerCompany,
+                session: session,
+                completedTasks: completedTasks.join(','),
+                taskDefinitions: JSON.stringify(tasks)
+            })
         });
         
+        const result = await response.json();
+        
         if (result.status === 'success') {
-		    alert(`✅ ${result.message}\n\n${result.completed}/${result.total} oppgaver løst\nScore: ${result.score} kr`);
-		    refreshPlayers();
-		} else {
-            alert('⚠️ Feil: ' + result.message);
+            alert(`✅ Lagret! ${result.completed}/${result.total} oppgaver`);
+            refreshPlayers();
+        } else {
+            alert('❌ Feil: ' + result.message);
         }
     } catch (error) {
         console.error('Feil:', error);
-        alert('⚠️ Kunne ikke lagre resultat');
+        alert('❌ Kunne ikke lagre');
     }
 }
 		
