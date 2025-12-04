@@ -680,6 +680,43 @@
 		    transform: translateY(-2px);
 		    box-shadow: 0 5px 20px rgba(0, 166, 81, 0.3);
 		}
+
+		.leaderboard-badges {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.din-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    display: inline-block;
+    width: fit-content;
+}
+
+.din-badge.rank-1 {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #1a472a;
+}
+
+.din-badge.rank-2 {
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    color: #333;
+}
+
+.din-badge.rank-3 {
+    background: linear-gradient(135deg, #cd7f32, #e9a76c);
+    color: white;
+}
+
+.tasks-badge {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 600;
+}
 		
     </style>
 </head>
@@ -1357,16 +1394,34 @@ function displayLeaderboard(players) {
         const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
         const balance = player.totalBalance || 250000;
         
-        html += `
-            <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
-                <div class="leaderboard-rank">${medal || rank}</div>
-                <div class="leaderboard-info">
-                    <strong>${player.name}</strong>
-                    <small>${player.company}</small>
-                </div>
-                <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
-            </div>
-        `;
+		        // DIN badges
+		const dinBadges = {
+		    1: '🏆 Vinner av DIN pitch konkurranse 2025',
+		    2: '🥈 Andreplass i DIN pitch konkurranse 2025',
+		    3: '🥉 Tredjeplass i DIN pitch konkurranse 2025'
+		};
+		
+		let badgeHTML = '';
+		if (player.dinRank && dinBadges[player.dinRank]) {
+		    badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
+		}
+		
+		const tasksHTML = `<div class="tasks-badge">⭐ ${player.completedTasks || '0/9'} oppgaver</div>`;
+		
+		html += `
+		    <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
+		        <div class="leaderboard-rank">${medal || rank}</div>
+		        <div class="leaderboard-info">
+		            <strong>${player.name}</strong>
+		            <small>${player.company}</small>
+		            <div class="leaderboard-badges">
+		                ${badgeHTML}
+		                ${tasksHTML}
+		            </div>
+		        </div>
+		        <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+		    </div>
+		`;
     });
     
     container.innerHTML = html;
