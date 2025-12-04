@@ -799,29 +799,29 @@ const SESSIONS = {
                 type: 'text',
                 reward: 0,
                 penalty: 2000,
-                desc: '<strong>Uhellet er ute! 💸</strong><br><br>Det har kommet en faktura i posten fra "Nordic IT Solutions AS" på 12 500 kr inkl. MVA for "systemlisenser og oppsett."<br><br>Problemet? Du husker ikke å ha bestilt noe fra dem, og fakturabeløpet virker mistenkelig høyt. Kontaktperson på fakturaen svarer ikke på telefon.<br><br>Regnskapsføreren din sier: "Registrer den uansett - vi må ha kontroll på hva som kommer inn. Men ikke betal før du har undersøkt!"<br><br><strong>Oppgave:</strong> Bokfør leverandørfakturaen.'
+                desc: '<strong>Dim første leverandørfaktkura..?</strong><br><br>Det har kommet en faktura fra "Nordic IT Solutions AS" på 12 500 kr inkl. MVA for "systemlisenser og oppsett."<br><br>Problemet? Du husker ikke å ha bestilt noe fra dem, og fakturabeløpet virker mistenkelig høyt. Kontaktperson på fakturaen svarer ikke på telefon.<br><br>Regnskapsføreren din sier: "Registrer den uansett - vi må ha kontroll på hva som kommer inn. Men sørg for å bruke betalingsform for å registerer betaling senere!"<br><br><strong>Oppgave:</strong> Bokfør leverandørfakturaen.'
             },
             {
-                title: 'Inntektsbilag',
-                type: 'text',
-                reward: 7500,
-                penalty: 0,
-                desc: '<strong>Ping! Ny e-post 📧</strong><br><br>"Hei! Har nå endelig betalt fakturaen fra september - beklager at det tok tid!"<br><br>Du sjekker banken - joda, 7 500 kr har kommet inn. Men fakturaen ble sendt fra det gamle regnskapssystemet ditt før du gikk over til Tripletex, så den finnes ikke her.<br><br><strong>Oppgave:</strong> Bokfør et inntektsbilag og registrer betalingen på 7 500 kr i Tripletex.'
-            },
-            {
-                title: 'Opprett din første kunde',
-                type: 'text',
-                reward: 0,
-                penalty: 2000,
-                desc: '<strong>Din første kunde! 🎉</strong><br><br>Telefonen ringer. "Hei, vi har hørt gode ting om dere! Vi trenger hjelp med et kritisk prosjekt - kan dere ta det?"<br><br>Endelig! Din første ordentlige kunde. Men før du kan fakturere må du få dem inn i systemet.<br><br><strong>Oppgave:</strong> Opprett kunden i Tripletex med navn og kontaktinfo.'
-            },
-            {
-                title: 'Din første faktura',
-                type: 'text',
-                reward: 20000,
-                penalty: 5000,
-                desc: '<strong>På tide å fakturere! 💰</strong><br><br>Kunden trenger umiddelbart hjelp med et kritisk prosjekt.<br><br>"Vi betaler hva som helst for å få dette på plass," sa de. "Men sørg for at fakturaen er korrekt - vi har droppet leverandører som rotet med MVA."<br><br>Regnskapsføreren minner deg på: "Husk å sette opp fakturamal med logo først - førsteinntrykket teller!"<br><br><strong>Oppgave del 1:</strong> Last opp logo og tilpass fakturamal med selskapsinfo.<br><br><strong>Oppgave del 2:</strong> Aktiver muligheten for å bruke MVA-koder.<br><br><strong>Oppgave del 3:</strong> Send faktura på 25 000 kr inkl. mva.'
-            }
+		    title: 'Opprett din første kunde',
+		    type: 'text',
+		    reward: 0,
+		    penalty: 2000,
+		    desc: '<strong>Endelig! 🎉</strong><br><br>Telefonen ringer. Den prospekten du har snakket med hele høsten er endelig klar til å signere.<br><br>"Vi vil starte med et pilotprosjekt," sier de. "Hvis det går bra, blir dette et langt samarbeid."<br><br>Dette kan bli starten på noe stort, men først må du få dem ordentlig inn i systemet.<br><br><strong>Oppgave:</strong> Opprett kunden i Tripletex med navn og kontaktinfo.'
+		},
+		{
+		    title: 'Inntektsbilag',
+		    type: 'text',
+		    reward: 7500,
+		    penalty: 0,
+		    desc: '<strong>Vent litt... 🤔</strong><br><br>Du sjekker bankkontoen og oppdager noe: Kunden har betalt 7 500 kr. Du skroller tilbake i e-postene - ah, riktig! Du sendte dem jo en liten faktura i september, før du byttet til Tripletex.<br><br>Pengene er inne, men fakturaen eksisterer ikke i Tripletex.<br><br><strong>Oppgave:</strong> Bokfør et inntektsbilag på 7 500 kr og registrer betalingen.'
+		},
+		{
+		    title: 'Din første faktura',
+		    type: 'text',
+		    reward: 20000,
+		    penalty: 5000,
+		    desc: '<strong>Showtime! 💰</strong><br><br>"Vi trenger dere med én gang," sier kunden. "Kritisk prosjekt. Vi betaler hva som helst for å få dette på plass - men send en skikkelig faktura. Sist vi jobbet med en leverandør rotet de med MVA, og det endte ikke bra."<br><br>Ok, no pressure.<br><br>Regnskapsføreren ringer også: "Husk å legge inn logo før du sender første faktura - førsteinntrykket teller!"<br><br><strong>Oppgave del 1:</strong> Last opp logo og sett opp fakturamal.<br><br><strong>Oppgave del 2:</strong> Send faktura på 25 000 kr inkl. mva.'
+		}
         ],
         choices: []
     },
@@ -851,12 +851,12 @@ const SESSIONS = {
 			    desc: '<strong>Telefon fra Bilen 📱</strong><br><br>Din ansatte ringer med stresset stemme: "Møtet gikk kjempebra! Hotellet kostet en formue, og jeg måtte kjøre hele veien..."<br><br>"Kan du hjelpe meg få orden på dette?"<br><br><strong>Oppgave:</strong> Før reiseregning knyttet til prosjektet:<br>• Kostgodtgjørelse: Overnatting over 12 timer - innland<br>• Hotell: Quality Hotel Prinsen, Trondheim<br>• Kjøring: 500 km<br>• Godkjenn reiseregningen'
 			},
             {
-			    title: 'Timeføring og viderefakturering',
-			    type: 'text',
-			    reward: 30000,
-			    penalty: 0,
-			    desc: '<strong>Fakturerbart arbeid! 💵</strong><br><br>Din ansatte har levert varene. 40 timer med solid konsulentarbeid - og kunden er fornøyd.<br><br>"Kan vi få fakturaen ASAP? Budsjettet må lukkes denne måneden," skriver kunden.<br><br><strong>Oppgave:</strong><br>• Før 40 timer à 750 kr/time på prosjektet<br>• Fakturer timer og reisekostnader til kunden'
-			}
+		    title: 'Timeføring og viderefakturering',
+		    type: 'text',
+		    reward: 30000,
+		    penalty: 0,
+		    desc: '<strong>Fakturerbart arbeid! 💵</strong><br><br>Din ansatte har levert varene. 40 timer med solid konsulentarbeid - og kunden er fornøyd.<br><br>"Kan vi få fakturaen ASAP? Budsjettet må lukkes denne måneden," skriver kunden.<br><br><strong>Oppgave:</strong><br>• Opprett en prosjektaktivitet for kundeoppdraget<br>• Før 40 timer à 750 kr/time på prosjektet<br>• Fakturer timer og reisekostnader til kunden'
+		}
         ],
         choices: []
     },
@@ -883,7 +883,7 @@ const SESSIONS = {
 			    type: 'text',
 			    reward: 23000,
 			    penalty: 0,
-			    desc: '<strong>Kunden vil ha fast avtale! 🔄</strong><br><br>Etter kundebesøket er kunden strålende fornøyd. De ringer deg: "Vi vil ha en fast avtale - slipper å tenke på det hver måned!"<br><br>Sett opp abonnementer:<br><br><strong>ABONNEMENT 1: Serviceavtale</strong><br>• Opprett produkt: 15 000 kr inkl. MVA<br>• Månedlig fakturering, 12 måneder<br>• Startdato: 01.09.2025<br><br><strong>ABONNEMENT 2: Supportavtale</strong><br>• Opprett produkt: 8 000 kr ekskl. MVA<br>• Månedlig fakturering, 6 måneder<br>• Startdato: 01.10.2025<br><br><strong>Oppgave:</strong> Opprett produktene og sett opp abonnementene for kunden.'
+			    desc: '<strong>Kunden vil ha fast avtale! 🔄</strong><br><br>Etter kundebesøket er kunden strålende fornøyd. De ringer deg: "Vi vil ha en fast avtale - slipper å tenke på det hver måned!"<br><br>Sett opp abonnementer:<br><br><strong>ABONNEMENT 1: Serviceavtale</strong><br>• 15 000 kr inkl. MVA<br>• Månedlig fakturering, 12 måneder<br>• Startdato: 01.11.2025<br><br><strong>ABONNEMENT 2: Supportavtale</strong><br>• 8 000 kr ekskl. MVA<br>• Månedlig fakturering<br>• Startdato: 01.12.2025<br><br><strong>Oppgave:</strong> Sett opp abonnementene og godkjenn de til fakturering.'
 			},
             {
                 title: 'Bankavstemming og periodeavslutning',
