@@ -80,6 +80,44 @@
             50% { opacity: 0.8; }
         }
 
+		.previous-results {
+		    background: white;
+		    border-radius: 12px;
+		    margin-bottom: 1.5rem;
+		    border: 2px solid #E5E7EB;
+		    overflow: hidden;
+		}
+		
+		.previous-results-header {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    padding: 1rem 1.5rem;
+		    background: #F9FAFB;
+		    cursor: pointer;
+		}
+		
+		.previous-results.open .previous-results-content {
+		    max-height: 600px;
+		}
+		
+		.previous-results-content {
+		    max-height: 0;
+		    overflow: hidden;
+		    transition: max-height 0.3s;
+		}
+		
+		.previous-task-item {
+		    display: flex;
+		    justify-content: space-between;
+		    padding: 0.75rem;
+		    margin: 0.5rem 1rem;
+		    border-radius: 8px;
+		}
+		
+		.previous-task-item.completed { background: #f0fff4; border-left: 4px solid #28a745; }
+		.previous-task-item.failed { background: #fff5f5; border-left: 4px solid #dc3545; }
+
         .countdown-container h3 {
             font-size: 1rem;
             margin-bottom: 0.5rem;
