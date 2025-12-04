@@ -1472,16 +1472,34 @@ function displayLeaderboard(players) {
         const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
         const balance = player.totalBalance || 250000;
         
-        html += `
-            <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
-                <div class="leaderboard-rank">${medal || rank}</div>
-                <div class="leaderboard-info">
-                    <strong>${player.name}</strong>
-                    <small>${player.company}</small>
-                </div>
-                <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+        // DIN badges
+const dinBadges = {
+    1: '🏆 Vinner av DIN pitch konkurranse 2025',
+    2: '🥈 Andreplass i DIN pitch konkurranse 2025',
+    3: '🥉 Tredjeplass i DIN pitch konkurranse 2025'
+};
+
+let badgeHTML = '';
+if (player.dinRank && dinBadges[player.dinRank]) {
+    badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
+}
+
+const tasksHTML = `<div class="tasks-badge">⭐ ${player.completedTasks || '0/9'} oppgaver</div>`;
+
+html += `
+    <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
+        <div class="leaderboard-rank">${medal || rank}</div>
+        <div class="leaderboard-info">
+            <strong>${player.name}</strong>
+            <small>${player.company}</small>
+            <div class="leaderboard-badges">
+                ${badgeHTML}
+                ${tasksHTML}
             </div>
-        `;
+        </div>
+        <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+    </div>
+`;
     });
     
     document.getElementById('leaderboardFull').innerHTML = html;
