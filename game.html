@@ -717,6 +717,30 @@
     color: #666;
     font-weight: 600;
 }
+
+		.task-breakdown {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.task-session {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.task-session-label {
+    color: #888;
+    min-width: 40px;
+}
+
+.task-checks {
+    display: flex;
+    gap: 0.1rem;
+}
 		
     </style>
 </head>
@@ -1375,6 +1399,35 @@ const SESSIONS = {
     }
 }
 
+function getTaskBreakdown(player) {
+    const sessions = [
+        { label: 'Ø1', total: 5, completed: player.session1TaskIds },
+        { label: 'Ø2', total: 4, completed: player.session2TaskIds },
+        { label: 'Ø3', total: 4, completed: player.session3TaskIds }
+    ];
+    
+    let html = '<div class="task-breakdown">';
+    
+    sessions.forEach(session => {
+        const completedIds = session.completed ? session.completed.split(',').map(id => parseInt(id)) : [];
+        let checks = '';
+        
+        for (let i = 1; i <= session.total; i++) {
+            checks += completedIds.includes(i) ? '✅' : '❌';
+        }
+        
+        html += `
+            <div class="task-session">
+                <span class="task-session-label">${session.label}:</span>
+                <span class="task-checks">${checks}</span>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    return html;
+}		
+
 function displayLeaderboard(players) {
     const container = document.getElementById('leaderboard');
     const validPlayers = players.filter(p => p.name && p.company);
@@ -1406,7 +1459,10 @@ function displayLeaderboard(players) {
 		    badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
 		}
 		
-		const tasksHTML = `<div class="tasks-badge">⭐ ${player.completedTasks || '0/9'} oppgaver</div>`;
+		const tasksHTML = `
+		    <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
+		    ${getTaskBreakdown(player)}
+		`;
 		
 		html += `
 		    <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
@@ -1484,7 +1540,10 @@ if (player.dinRank && dinBadges[player.dinRank]) {
     badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
 }
 
-const tasksHTML = `<div class="tasks-badge">⭐ ${player.completedTasks || '0/9'} oppgaver</div>`;
+const tasksHTML = `
+    <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
+    ${getTaskBreakdown(player)}
+`;
 
 html += `
     <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
