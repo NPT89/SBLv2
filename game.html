@@ -1432,6 +1432,9 @@ function getTaskBreakdown(player) {
     return html;
 }
 
+function toggleLeaderboard() {
+    document.getElementById('leaderboardSticky').classList.toggle('open');
+}		
 
 async function loadLeaderboard() {
     try {
