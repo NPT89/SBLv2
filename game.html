@@ -1451,58 +1451,47 @@ function displayLeaderboard(players) {
         const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
         const balance = player.totalBalance || 250000;
         
-        // DIN badges
-        const dinBadges = {
-            1: '🏆 Vinner av DIN pitch konkurranse 2025',
-            2: '🥈 Andreplass i DIN pitch konkurranse 2025',
-            3: '🥉 Tredjeplass i DIN pitch konkurranse 2025'
-        };
-        
-        let badgeHTML = '';
-        if (player.dinRank && dinBadges[player.dinRank]) {
-            badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
-        }
-        
-        const tasksHTML = `
-            <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
-            ${getTaskBreakdown(player)}
-        `;
-        
-        html += `
-            <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
-                <div class="leaderboard-rank">${medal || rank}</div>
-                <div class="leaderboard-info">
-                    <strong>${player.name}</strong>
-                    <small>${player.company}</small>
-                    <div class="leaderboard-badges">
-                        ${badgeHTML}
-                        ${tasksHTML}
-                    </div>
-                </div>
-                <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
-            </div>
-        `;
+		        // DIN badges
+		const dinBadges = {
+		    1: '🏆 Vinner av DIN pitch konkurranse 2025',
+		    2: '🥈 Andreplass i DIN pitch konkurranse 2025',
+		    3: '🥉 Tredjeplass i DIN pitch konkurranse 2025'
+		};
+		
+		let badgeHTML = '';
+		if (player.dinRank && dinBadges[player.dinRank]) {
+		    badgeHTML = `<div class="din-badge rank-${player.dinRank}">${dinBadges[player.dinRank]}</div>`;
+		}
+		
+		const tasksHTML = `
+		    <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
+		    ${(player)}
+		`;
+		
+		html += `
+		    <div class="leaderboard-item ${isTop3 ? 'top3' : ''} ${isMe ? 'me' : ''}">
+		        <div class="leaderboard-rank">${medal || rank}</div>
+		        <div class="leaderboard-info">
+		            <strong>${player.name}</strong>
+		            <small>${player.company}</small>
+		            <div class="leaderboard-badges">
+		                ${badgeHTML}
+		                ${tasksHTML}
+		            </div>
+		        </div>
+		        <div class="leaderboard-points">${balance.toLocaleString('no-NO')} kr</div>
+		    </div>
+		`;
     });
     
     container.innerHTML = html;
 }
 
-loadLeaderboard();
-setInterval(loadLeaderboard, 30000);
+		loadLeaderboard();
+		setInterval(loadLeaderboard, 30000);
 
-function toggleLeaderboard() {
+		function toggleLeaderboard() {
     document.getElementById('leaderboardSticky').classList.toggle('open');
-}
-
-async function loadLeaderboard() {
-    try {
-        const data = await jsonpRequest(SHEETS_API_URL, { action: 'getAllPlayers' });
-        if (data.status === 'success') {
-            displayLeaderboard(data.players);
-        }
-    } catch (error) {
-        console.error('Feil ved lasting av leaderboard:', error);
-    }
 }
 
 async function loadLeaderboard() {
@@ -1557,7 +1546,7 @@ if (player.dinRank && dinBadges[player.dinRank]) {
 
 const tasksHTML = `
     <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
-    ${getTaskBreakdown(player)}
+    ${(player)}
 `;
 
 html += `
