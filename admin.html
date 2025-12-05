@@ -431,6 +431,12 @@
 
 function loadPlayerTasks() {
     const playerCompany = document.getElementById('taskPlayer').value;
+	console.log('🔍 Sending company:', playerCompany);
+	
+	if (!playerCompany) {
+	    alert('Velg en spiller først!');
+	    return;
+	}
     const session = parseInt(document.getElementById('taskSession').value);
     
     if (!playerCompany) {
