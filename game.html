@@ -1465,7 +1465,7 @@ function displayLeaderboard(players) {
 		
 		const tasksHTML = `
 		    <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
-		    ${(player)}
+		    ${getTaskBreakdown(player)}
 		`;
 		
 		html += `
@@ -1546,7 +1546,7 @@ if (player.dinRank && dinBadges[player.dinRank]) {
 
 const tasksHTML = `
     <div class="tasks-badge">⭐ ${player.completedTasks || '0/13'} oppgaver</div>
-    ${(player)}
+    ${getTaskBreakdown(player)}
 `;
 
 html += `
