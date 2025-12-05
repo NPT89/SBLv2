@@ -1409,7 +1409,9 @@ function getTaskBreakdown(player) {
     let html = '<div class="task-breakdown">';
     
     sessions.forEach(session => {
-        const completedIds = session.completed ? session.completed.split(',').map(id => parseInt(id)) : [];
+        const completedIds = (session.completed && typeof session.completed === 'string') 
+		    ? session.completed.split(',').map(id => parseInt(id)) 
+		    : [];
         let checks = '';
         
         for (let i = 1; i <= session.total; i++) {
